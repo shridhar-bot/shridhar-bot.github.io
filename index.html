@@ -10,6 +10,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Public+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<script>document.documentElement.classList.add('js')</script>
 <style>
   :root{
     --bg:#F3F5F8;
@@ -18,13 +19,15 @@
     --muted:#5B6577;
     --line:#D9DEE7;
     --blue:#3858E9;
+    --blue-dark:#2745D0;
     --blue-soft:#E8ECFD;
     --display:"Bricolage Grotesque", system-ui, sans-serif;
     --body:"Public Sans", system-ui, sans-serif;
     --wrap:1120px;
+    --ease:cubic-bezier(.22,.8,.24,1);
   }
   *{box-sizing:border-box}
-  html{scroll-behavior:smooth}
+  html{scroll-behavior:smooth;scroll-padding-top:90px}
   body{margin:0;background:var(--bg);color:var(--ink);font:400 1.0625rem/1.65 var(--body);-webkit-font-smoothing:antialiased}
   a{color:inherit}
   :focus-visible{outline:3px solid var(--blue);outline-offset:3px;border-radius:4px}
@@ -32,35 +35,40 @@
   h1,h2,h3{font-family:var(--display);line-height:1.08;margin:0;letter-spacing:-.02em}
   p{margin:0}
 
-  /* ---------- top bar ---------- */
-  .top{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:22px 0}
+  /* ---------- sticky top bar ---------- */
+  .topbar{position:sticky;top:0;z-index:20;transition:background .3s,box-shadow .3s}
+  .topbar.scrolled{background:rgba(243,245,248,.86);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);box-shadow:0 1px 0 var(--line)}
+  .top{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:18px 0}
   .brand{font-family:var(--display);font-weight:700;font-size:1.15rem;text-decoration:none}
   .nav{display:flex;align-items:center;gap:26px;font-size:.95rem}
-  .nav a{text-decoration:none;color:var(--muted)}
-  .nav a:hover{color:var(--ink)}
-  .btn{display:inline-flex;align-items:center;gap:8px;background:var(--blue);color:#fff;text-decoration:none;font-weight:600;font-size:.95rem;padding:11px 18px;border-radius:6px;white-space:nowrap}
-  .btn:hover{background:#2745d0}
+  .nav a:not(.btn){text-decoration:none;color:var(--muted);position:relative;padding:4px 0}
+  .nav a:not(.btn)::after{content:"";position:absolute;left:0;right:0;bottom:-2px;height:2px;background:var(--blue);transform:scaleX(0);transform-origin:left;transition:transform .3s var(--ease)}
+  .nav a:not(.btn):hover,.nav a.active{color:var(--ink)}
+  .nav a.active::after{transform:scaleX(1)}
+  .btn{display:inline-flex;align-items:center;gap:8px;background:var(--blue);color:#fff;text-decoration:none;font-weight:600;font-size:.95rem;padding:11px 18px;border-radius:6px;white-space:nowrap;transition:background .2s,transform .2s var(--ease),box-shadow .2s}
+  .btn:hover{background:var(--blue-dark);transform:translateY(-2px);box-shadow:0 8px 18px -8px rgba(56,88,233,.6)}
+  .btn:active{transform:translateY(0)}
   .btn.ghost{background:transparent;color:var(--ink);box-shadow:inset 0 0 0 1.5px var(--ink)}
   .btn.ghost:hover{background:var(--ink);color:#fff}
-  .nav .btn{color:#fff}
+  .btn svg{flex:none}
 
   /* ---------- hero: the page as a block editor ---------- */
-  .editor{margin:18px 0 0;background:var(--surface);border:1px solid var(--line);border-radius:10px;overflow:hidden;
-          display:grid;grid-template-columns:230px 1fr}
+  .editor{margin:10px 0 0;background:var(--surface);border:1px solid var(--line);border-radius:10px;overflow:hidden;
+          display:grid;grid-template-columns:230px 1fr;box-shadow:0 30px 60px -40px rgba(23,32,51,.35)}
   .editor-bar{grid-column:1/-1;display:flex;align-items:center;gap:14px;padding:10px 16px;border-bottom:1px solid var(--line);font-size:.85rem;color:var(--muted)}
   .editor-bar .wp{width:28px;height:28px;border-radius:5px;background:var(--ink);display:grid;place-items:center}
   .editor-bar .doc{margin:0 auto;color:var(--ink);font-weight:500}
-  .editor-bar .pub{background:var(--blue);color:#fff;padding:5px 12px;border-radius:4px;font-weight:600;text-decoration:none}
+  .editor-bar .pub{background:var(--blue);color:#fff;padding:5px 12px;border-radius:4px;font-weight:600;min-width:84px;text-align:center}
   .listview{border-right:1px solid var(--line);padding:18px 14px;font-size:.9rem}
   .listview p{color:var(--muted);font-size:.8rem;margin-bottom:10px;font-weight:600}
   .listview ol{list-style:none;margin:0;padding:0}
-  .listview li a{display:flex;align-items:center;gap:10px;padding:7px 10px;border-radius:4px;text-decoration:none;color:var(--ink)}
-  .listview li a:hover{background:var(--bg)}
+  .listview li a{display:flex;align-items:center;gap:10px;padding:7px 10px;border-radius:4px;text-decoration:none;color:var(--ink);transition:background .2s,padding .2s var(--ease)}
+  .listview li a:hover{background:var(--bg);padding-left:14px}
   .listview li a[aria-current]{background:var(--blue);color:#fff}
   .listview svg{flex:none}
   .canvas{padding:104px 64px 72px;position:relative}
-  .block{position:relative;outline:1.5px solid var(--blue);outline-offset:14px;border-radius:2px}
-  .toolbar{position:absolute;top:-62px;left:-14px;display:flex;background:var(--surface);border:1px solid var(--ink);border-radius:4px;font-size:.8rem;font-weight:600}
+  .block{position:relative;outline:1.5px solid var(--blue);outline-offset:14px;border-radius:2px;transition:outline-color .4s}
+  .toolbar{position:absolute;top:-62px;left:-14px;display:flex;background:var(--surface);border:1px solid var(--ink);border-radius:4px;font-size:.8rem;font-weight:600;transition:opacity .35s var(--ease),transform .35s var(--ease)}
   .toolbar span{padding:6px 10px;border-right:1px solid var(--line)}
   .toolbar span:last-child{border-right:0}
   .hero-title{font-size:clamp(2.6rem,6.4vw,5.4rem);font-weight:800;max-width:13ch}
@@ -71,20 +79,39 @@
   .inserter{margin-top:46px;display:flex;align-items:center;gap:10px;color:var(--muted);font-size:.9rem}
   .inserter b{width:26px;height:26px;border-radius:4px;background:var(--ink);color:#fff;display:grid;place-items:center;font-weight:500}
 
+  /* hero load sequence: heading types itself, then the block gets selected, then the rest appears */
+  .js .block{outline-color:transparent}
+  .js .toolbar{opacity:0;transform:translateY(6px)}
+  .js .hero-rest > *{opacity:0;transform:translateY(14px);transition:opacity .6s var(--ease),transform .6s var(--ease)}
+  .js .hero-title .ch{display:none}
+  .js .hero-title .ch.on{display:inline}
+  .js .is-done .block{outline-color:var(--blue)}
+  .js .is-done .toolbar{opacity:1;transform:none}
+  .js .is-done .hero-rest > *{opacity:1;transform:none}
+  .js .is-done .hero-rest > :nth-child(2){transition-delay:.12s}
+  .js .is-done .hero-rest > :nth-child(3){transition-delay:.24s}
+
   /* ---------- sections ---------- */
-  section{padding:110px 0 0}
+  section{padding:120px 0 0}
   .sec-head{display:grid;grid-template-columns:1fr 1.3fr;gap:40px;align-items:end;margin-bottom:48px}
   .sec-head h2{font-size:clamp(2rem,4vw,3rem);font-weight:700}
   .sec-head p{color:var(--muted);max-width:52ch}
 
-  /* projects: rows, not a card grid */
-  .project{display:grid;grid-template-columns:1.05fr 1fr;gap:56px;align-items:center;padding:48px 0;border-top:1px solid var(--line)}
-  .project:nth-child(even) .shot{order:2}
-  .shot{position:relative;aspect-ratio:16/10;border-radius:8px;overflow:hidden;background:var(--surface);border:1px solid var(--line);display:grid;place-items:center}
-  .shot img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:top}
+  /* projects: rows with a browser frame; the screenshot scrolls on hover */
+  .project{display:grid;grid-template-columns:1.1fr 1fr;gap:56px;align-items:center;padding:52px 0;border-top:1px solid var(--line)}
+  .project:nth-child(even) .browser{order:2}
+  .browser{margin:0;background:var(--surface);border:1px solid var(--line);border-radius:10px;overflow:hidden;
+           transition:transform .5s var(--ease),box-shadow .5s var(--ease)}
+  .browser:hover{transform:translateY(-6px);box-shadow:0 30px 50px -30px rgba(23,32,51,.45)}
+  .url{display:flex;align-items:center;gap:8px;padding:9px 12px;border-bottom:1px solid var(--line);font-size:.8rem;color:var(--muted)}
+  .url span{flex:1;background:var(--bg);border-radius:999px;padding:4px 12px}
+  .shot{position:relative;aspect-ratio:16/10;overflow:hidden;background:var(--bg);display:grid;place-items:center}
+  .shot img{position:absolute;top:0;left:0;width:100%;height:auto;min-height:100%;object-fit:cover;object-position:top;transition:transform 5s linear}
   .shot .ph{font-family:var(--display);font-weight:700;font-size:clamp(1.4rem,2.6vw,2rem);color:var(--line)}
   .shot.featured{background:var(--blue-soft)}
   .shot.featured .ph{color:#b9c4f6}
+  .hint{position:absolute;right:12px;bottom:12px;background:rgba(23,32,51,.82);color:#fff;font-size:.75rem;padding:5px 10px;border-radius:999px;opacity:0;transition:opacity .3s}
+  .browser:hover .hint{opacity:1}
   .project .kind{color:var(--blue);font-weight:600;font-size:.95rem;margin-bottom:10px}
   .project h3{font-size:clamp(1.6rem,2.8vw,2.2rem);font-weight:700;margin-bottom:14px}
   .project p.lede{color:var(--muted);margin-bottom:18px}
@@ -93,12 +120,14 @@
   .project li::marker{color:var(--blue)}
   .stack{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:22px}
   .stack span{font-size:.82rem;font-weight:500;padding:4px 10px;border-radius:999px;background:var(--surface);border:1px solid var(--line)}
-  .visit{font-weight:600;text-decoration-thickness:1.5px;text-underline-offset:4px}
+  .visit{display:inline-flex;align-items:center;gap:6px;font-weight:600;text-decoration:none;border-bottom:1.5px solid currentColor;padding-bottom:2px;transition:color .2s}
   .visit:hover{color:var(--blue)}
 
   /* services */
   .services{display:grid;grid-template-columns:repeat(2,1fr);gap:0 56px}
-  .service{padding:26px 0;border-top:1px solid var(--line)}
+  .service{position:relative;padding:26px 0;border-top:1px solid var(--line)}
+  .service::before{content:"";position:absolute;left:0;top:-1px;height:2px;width:100%;background:var(--blue);transform:scaleX(0);transform-origin:left;transition:transform .5s var(--ease)}
+  .service:hover::before{transform:scaleX(1)}
   .service h3{font-size:1.3rem;font-weight:700;margin-bottom:8px}
   .service p{color:var(--muted);max-width:48ch}
 
@@ -106,18 +135,25 @@
   .timeline{list-style:none;margin:0;padding:0;border-left:2px solid var(--line);max-width:720px}
   .timeline li{position:relative;padding:0 0 34px 30px}
   .timeline li::before{content:"";position:absolute;left:-7px;top:8px;width:12px;height:12px;border-radius:50%;background:var(--bg);border:2px solid var(--muted)}
-  .timeline li.now::before{background:var(--blue);border-color:var(--blue)}
+  .timeline li.now::before{background:var(--blue);border-color:var(--blue);animation:pulse 2.4s infinite}
+  @keyframes pulse{0%{box-shadow:0 0 0 0 rgba(56,88,233,.5)}70%{box-shadow:0 0 0 10px rgba(56,88,233,0)}100%{box-shadow:0 0 0 0 rgba(56,88,233,0)}}
   .timeline h3{font-size:1.25rem;font-weight:700}
   .timeline .when{color:var(--muted);font-size:.92rem;margin:2px 0 6px}
 
   /* contact */
-  .contact{margin:110px 0 0;background:var(--ink);color:#fff;border-radius:10px;padding:72px 64px;display:grid;grid-template-columns:1.4fr 1fr;gap:40px;align-items:end}
+  .contact{margin:120px 0 0;background:var(--ink);color:#fff;border-radius:10px;padding:72px 64px;display:grid;grid-template-columns:1.4fr 1fr;gap:40px;align-items:end;position:relative;overflow:hidden}
+  .contact::after{content:"";position:absolute;width:420px;height:420px;right:-140px;top:-180px;border-radius:50%;background:radial-gradient(circle,rgba(56,88,233,.45),transparent 65%);pointer-events:none}
+  .contact > *{position:relative;z-index:1}
   .contact h2{font-size:clamp(2.2rem,4.6vw,3.6rem);font-weight:800}
   .contact p{color:#C3CAD8;margin-top:16px;max-width:46ch}
   .contact .actions{display:flex;flex-direction:column;gap:12px;align-items:flex-start}
   .contact .btn.ghost{color:#fff;box-shadow:inset 0 0 0 1.5px #fff}
   .contact .btn.ghost:hover{background:#fff;color:var(--ink)}
   footer{padding:36px 0 48px;color:var(--muted);font-size:.9rem;display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
+
+  /* scroll reveal */
+  .js .reveal{opacity:0;transform:translateY(28px);transition:opacity .8s var(--ease),transform .8s var(--ease)}
+  .js .reveal.in{opacity:1;transform:none}
 
   /* ---------- responsive ---------- */
   @media (max-width:900px){
@@ -126,7 +162,7 @@
     .canvas{padding:92px 28px 48px}
     .sec-head,.project,.services,.contact{grid-template-columns:1fr}
     .project{gap:28px}
-    .project:nth-child(even) .shot{order:0}
+    .project:nth-child(even) .browser{order:0}
     .contact{padding:48px 28px}
   }
   @media (max-width:640px){
@@ -135,34 +171,40 @@
     .brand{font-size:1.05rem}
     .editor-bar .doc{display:none}
     .toolbar span:nth-child(n+3){display:none}
-    section{padding-top:80px}
+    section{padding-top:84px}
   }
   @media (prefers-reduced-motion:reduce){
-    .caret{animation:none}
+    *,*::before,*::after{animation:none!important;transition:none!important}
     html{scroll-behavior:auto}
+    .js .reveal,.js .hero-rest > *,.js .toolbar{opacity:1;transform:none}
+    .js .block{outline-color:var(--blue)}
   }
 </style>
 </head>
 <body>
 
-<div class="wrap">
-  <header class="top">
-    <a class="brand" href="#">Shridhar Kakadiya</a>
-    <nav class="nav" aria-label="Main">
-      <a href="#work">Work</a>
-      <a href="#services">Services</a>
-      <a href="#experience">Experience</a>
-      <a class="btn" href="https://www.fiverr.com/shri_kakadiya" target="_blank" rel="noopener">Hire me on Fiverr</a>
-    </nav>
-  </header>
+<div class="topbar" id="topbar">
+  <div class="wrap">
+    <header class="top">
+      <a class="brand" href="#top">Shridhar Kakadiya</a>
+      <nav class="nav" aria-label="Main">
+        <a href="#work">Work</a>
+        <a href="#services">Services</a>
+        <a href="#experience">Experience</a>
+        <a class="btn" href="https://www.fiverr.com/shri_kakadiya" target="_blank" rel="noopener">Hire me on Fiverr</a>
+      </nav>
+    </header>
+  </div>
+</div>
 
+<div class="wrap">
   <!-- HERO: styled like the WordPress block editor -->
-  <div class="editor" role="presentation">
+  <div class="editor" id="hero">
     <div class="editor-bar" aria-hidden="true">
-      <span class="wp"><svg width="16" height="16" viewBox="0 0 24 24" fill="#fff"><path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20Zm-8.5 10c0-1.2.3-2.4.7-3.4l4 11A8.5 8.5 0 0 1 3.5 12Zm8.5 8.5c-.8 0-1.6-.1-2.4-.4l2.5-7.3 2.6 7.1v.1c-.9.3-1.8.5-2.7.5Zm1.2-12.5c.5 0 1-.1 1-.1.5 0 .4-.7 0-.7 0 0-1.4.1-2.3.1-.9 0-2.3-.1-2.3-.1-.5 0-.5.7 0 .7l.9.1 1.3 3.6-1.8 5.5-3-9.1c.5 0 1-.1 1-.1.5 0 .4-.7 0-.7 0 0-1.4.1-2.3.1h-.6A8.5 8.5 0 0 1 17.8 6h-.1c-.9 0-1.5.8-1.5 1.6 0 .7.4 1.4.9 2.1.3.6.7 1.4.7 2.5 0 .8-.3 1.7-.7 2.9l-.9 3.1-3-9.2Zm3.1 11.3 2.6-7.5c.5-1.2.6-2.2.6-3 0-.3 0-.6-.1-.9a8.5 8.5 0 0 1-3.1 11.4Z"/></svg></span>
+      <span class="wp"><svg width="16" height="16" viewBox="0 0 24 24" fill="#fff"><path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20Zm-8.5 10c0-1.2.3-2.4.7-3.4l4 11A8.5 8.5 0 0 1 3.5 12Zm8.5 8.5c-.8 0-1.6-.1-2.4-.4l2.5-7.3 2.6 7.1v.1c-.9.3-1.8.5-2.7.5Zm1.2-12.5c.5 0 1-.1 1-.1.5 0 .4-.7 0-.7 0 0-1.4.1-2.3.1-.9 0-2.3-.1-2.3-.1-.5 0-.5.7 0 .7l.9.1 1.3 3.6-1.8 5.5-3-9.1c.5 0 1-.1 1-.1.5 0 .4-.7 0-.7 0 0-1.4.1-2.3.1h-.6A8.5 8.5 0 0 1 17.8 6h-.1c-.9 0-1.5.8-1.5 1.6 0 .7.4 1.400 .9 2.1.3.6.7 1.4.7 2.5 0 .8-.3 1.7-.7 2.9l-.9 3.1-3-9.2Zm3.1 11.3 2.6-7.5c.5-1.2.6-2.2.6-3 0-.3 0-.6-.1-.9a8.5 8.5 0 0 1-3.1 11.4Z"/></svg></span>
       <span>Undo · Redo</span>
       <span class="doc">Portfolio — Home</span>
-      <span class="pub">Published</span>
+      <span class="pub" id="pub">Published</span>
     </div>
 
     <nav class="listview" aria-label="Sections">
@@ -179,29 +221,40 @@
     <div class="canvas" id="top">
       <div class="block">
         <div class="toolbar" aria-hidden="true"><span>Heading</span><span>H1</span><span>B</span><span>I</span><span>⋮</span></div>
-        <h1 class="hero-title">I build WordPress and Shopify sites that are easy to run.<span class="caret" aria-hidden="true"></span></h1>
+        <h1 class="hero-title" id="heroTitle">I build WordPress and Shopify sites that are easy to run.</h1>
       </div>
-      <p class="hero-sub">I'm Shridhar, a developer in Surat, India. I write custom plugins, build WooCommerce stores and Shopify themes, and fix the sites other people left half-done, so you can update your own content without calling a developer.</p>
-      <div class="hero-actions">
-        <a class="btn" href="#work">See my work</a>
-        <a class="btn ghost" href="https://www.fiverr.com/shri_kakadiya" target="_blank" rel="noopener">Hire me on Fiverr</a>
+      <div class="hero-rest">
+        <p class="hero-sub">I'm Shridhar, a developer in Surat, India. I build WooCommerce stores, block themes and Shopify themes, and fix the sites other people left half-done, so you can update your own content without calling a developer.</p>
+        <div class="hero-actions">
+          <a class="btn" href="#work">See my work</a>
+          <a class="btn ghost" href="https://wa.me/919624729098" target="_blank" rel="noopener">Chat on WhatsApp</a>
+        </div>
+        <div class="inserter" aria-hidden="true"><b>+</b> Type / to choose a block</div>
       </div>
-      <div class="inserter" aria-hidden="true"><b>+</b> Type / to choose a block</div>
     </div>
   </div>
 
   <!-- WORK -->
   <section id="work">
-    <div class="sec-head">
+    <div class="sec-head reveal">
       <h2>Selected work</h2>
       <p>Live projects for real businesses: a perfume store, a pharma exporter and a fashion label.</p>
     </div>
 
     <div class="projects">
-      <article class="project">
-        <figure class="shot featured" style="margin:0">
-          <span class="ph">Itramh Aroma</span>
-          <img src="images/itramh.jpg" alt="Itramh Aroma perfume store homepage" onerror="this.remove()">
+      <!--
+        TO ADD A NEW PROJECT: copy one whole <article class="project reveal"> ... </article> block,
+        paste it where you want it, and change the text, link and image.
+        Put the screenshot in the images/ folder. A full-page (tall) screenshot scrolls on hover.
+      -->
+
+      <article class="project reveal">
+        <figure class="browser">
+          <div class="url" aria-hidden="true"><span>Itramh Aroma</span></div>
+          <div class="shot featured">
+            <span class="ph">Itramh Aroma</span>
+            <img src="images/itramh.jpg" alt="Itramh Aroma perfume store homepage" loading="lazy" onerror="this.remove()">
+          </div>
         </figure>
         <div>
           <p class="kind">WooCommerce store</p>
@@ -218,10 +271,13 @@
         </div>
       </article>
 
-      <article class="project">
-        <figure class="shot" style="margin:0">
-          <span class="ph">medizamed.com</span>
-          <img src="images/medizamed.jpg" alt="Medizamed pharma export website" onerror="this.remove()">
+      <article class="project reveal">
+        <figure class="browser">
+          <div class="url" aria-hidden="true"><span>medizamed.com</span></div>
+          <div class="shot">
+            <span class="ph">medizamed.com</span>
+            <img src="images/medizamed.jpg" alt="Medizamed pharma export website" loading="lazy" onerror="this.remove()">
+          </div>
         </figure>
         <div>
           <p class="kind">Website, SEO and UX</p>
@@ -237,10 +293,13 @@
         </div>
       </article>
 
-      <article class="project">
-        <figure class="shot" style="margin:0">
-          <span class="ph">Ishaya</span>
-          <img src="images/ishaya.jpg" alt="Ishaya Shopify store" onerror="this.remove()">
+      <article class="project reveal">
+        <figure class="browser">
+          <div class="url" aria-hidden="true"><span>Ishaya</span></div>
+          <div class="shot">
+            <span class="ph">Ishaya</span>
+            <img src="images/ishaya.jpg" alt="Ishaya Shopify store" loading="lazy" onerror="this.remove()">
+          </div>
         </figure>
         <div>
           <p class="kind">Shopify theme</p>
@@ -254,18 +313,17 @@
           <div class="stack"><span>Shopify Liquid</span><span>Online Store 2.0</span><span>GitHub</span></div>
         </div>
       </article>
-
     </div>
   </section>
 
   <!-- SERVICES -->
   <section id="services">
-    <div class="sec-head">
+    <div class="sec-head reveal">
       <h2>What I can do for you</h2>
       <p>Small fixes or full builds. You get clean code you own, and a site you can update yourself.</p>
     </div>
-    <div class="services">
-      <div class="service"><h3>Custom WordPress plugins</h3><p>Features your theme can't do: inventories, catalogs, calculators, import/export tools, admin dashboards.</p></div>
+    <div class="services reveal">
+      <div class="service"><h3>Custom WordPress plugins</h3><p>Features your theme can't do: catalogs, calculators, import/export tools, admin dashboards.</p></div>
       <div class="service"><h3>WooCommerce stores</h3><p>New stores, redesigns, checkout and cart fixes, and product setups that sell.</p></div>
       <div class="service"><h3>Block themes and Gutenberg</h3><p>Custom block themes and blocks, and moving old page-builder sites to native WordPress editing.</p></div>
       <div class="service"><h3>Shopify themes</h3><p>Custom sections, product pages and theme features, without stacking up monthly apps.</p></div>
@@ -276,11 +334,11 @@
 
   <!-- EXPERIENCE -->
   <section id="experience">
-    <div class="sec-head">
+    <div class="sec-head reveal">
       <h2>Experience</h2>
-      <p>Agency work by day, my own products and clients on the side.</p>
+      <p>Agency work by day, my own clients on the side.</p>
     </div>
-    <ol class="timeline">
+    <ol class="timeline reveal">
       <li class="now">
         <h3>WordPress Developer, Shingala Infotech</h3>
         <p class="when">Surat · Current</p>
@@ -295,15 +353,17 @@
   </section>
 
   <!-- CONTACT -->
-  <div class="contact" id="contact">
+  <div class="contact reveal" id="contact">
     <div>
       <h2>Have a site that needs work?</h2>
-      <p>Send me what you need on Fiverr. I'll reply with how I'd do it and what it will cost.</p>
+      <p>Send me what you need on Fiverr or WhatsApp. I'll reply with how I'd do it and what it will cost.</p>
     </div>
     <div class="actions">
       <a class="btn" href="https://www.fiverr.com/shri_kakadiya" target="_blank" rel="noopener">Message me on Fiverr</a>
-      <!-- Replace 91XXXXXXXXXX with your WhatsApp number (country code + number, no + or spaces) -->
-      <!-- <a class="btn ghost" href="https://wa.me/91XXXXXXXXXX" target="_blank" rel="noopener">Chat on WhatsApp</a> -->
+      <a class="btn ghost" href="https://wa.me/919624729098" target="_blank" rel="noopener">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2Zm0 18.2c-1.5 0-3-.4-4.3-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2Zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8-.2-.1-.4-.1-.6.1l-.8 1c-.1.2-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.900c-.2-.4.2-.4.7-1.300.1-.2 0-.3 0-.4l-.8-1.800c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.200c0 1.300.9 2.500 1.100 2.700.1.2 1.800 2.800 4.400 3.900 1.600.7 2.300.8 3.100.6.5-.1 1.500-.6 1.700-1.200.2-.6.2-1.100.2-1.200-.1-.1-.3-.2-.5-.3Z"/></svg>
+        Chat on WhatsApp
+      </a>
     </div>
   </div>
 
@@ -313,5 +373,94 @@
   </footer>
 </div>
 
+<script>
+(function(){
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var hero = document.getElementById('hero');
+  var title = document.getElementById('heroTitle');
+
+  /* 1. Hero: the heading types itself like a block being written */
+  function finishHero(){
+    hero.classList.add('is-done');
+    var pub = document.getElementById('pub');
+    pub.textContent = 'Saving…';
+    setTimeout(function(){ pub.textContent = 'Published'; }, 700);
+  }
+  if (reduce) {
+    finishHero();
+  } else {
+    var text = title.textContent;
+    title.setAttribute('aria-label', text);
+    title.style.minHeight = title.offsetHeight + 'px';
+    title.textContent = '';
+    var chars = [];
+    for (var i = 0; i < text.length; i++) {
+      var s = document.createElement('span');
+      s.className = 'ch';
+      s.setAttribute('aria-hidden', 'true');
+      s.textContent = text[i];
+      title.appendChild(s);
+      chars.push(s);
+    }
+    var caret = document.createElement('span');
+    caret.className = 'caret';
+    caret.setAttribute('aria-hidden', 'true');
+    title.appendChild(caret);
+    var n = 0;
+    (function type(){
+      if (n < chars.length) {
+        chars[n].classList.add('on'); n++;
+        setTimeout(type, chars[n-1].textContent === ' ' ? 40 : 28 + Math.random()*30);
+      } else {
+        title.style.minHeight = '';
+        setTimeout(finishHero, 250);
+      }
+    })();
+  }
+
+  /* 2. Sticky header gets a background after scrolling */
+  var bar = document.getElementById('topbar');
+  function onScroll(){ bar.classList.toggle('scrolled', window.scrollY > 10); }
+  window.addEventListener('scroll', onScroll, {passive:true}); onScroll();
+
+  /* 3. Reveal sections as they scroll into view, and underline the current nav link */
+  if ('IntersectionObserver' in window) {
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(e){ if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
+    }, {threshold:.12});
+    document.querySelectorAll('.reveal').forEach(function(el){ io.observe(el); });
+
+    var links = {};
+    document.querySelectorAll('.nav a[href^="#"]').forEach(function(a){ links[a.getAttribute('href').slice(1)] = a; });
+    var spy = new IntersectionObserver(function(entries){
+      entries.forEach(function(e){
+        var a = links[e.target.id]; if (!a) return;
+        if (e.isIntersecting) { Object.keys(links).forEach(function(k){ links[k].classList.remove('active'); }); a.classList.add('active'); }
+      });
+    }, {rootMargin:'-45% 0px -50% 0px'});
+    ['work','services','experience'].forEach(function(id){ var el = document.getElementById(id); if (el) spy.observe(el); });
+  } else {
+    document.querySelectorAll('.reveal').forEach(function(el){ el.classList.add('in'); });
+  }
+
+  /* 4. Tall screenshots scroll top-to-bottom on hover, like browsing the site */
+  document.querySelectorAll('.browser').forEach(function(fig){
+    var shot = fig.querySelector('.shot');
+    var img = shot.querySelector('img');
+    if (!img) return;
+    function setup(){
+      var dist = img.offsetHeight - shot.offsetHeight;
+      if (dist < 40) return;
+      var hint = document.createElement('span');
+      hint.className = 'hint'; hint.textContent = 'Scrolling the page';
+      shot.appendChild(hint);
+      img.style.transitionDuration = Math.min(8, Math.max(2, dist/350)) + 's';
+      fig.addEventListener('mouseenter', function(){ img.style.transform = 'translateY(-' + (img.offsetHeight - shot.offsetHeight) + 'px)'; });
+      fig.addEventListener('mouseleave', function(){ img.style.transform = ''; });
+    }
+    if (img.complete && img.naturalHeight) setup(); else img.addEventListener('load', setup);
+  });
+})();
+</script>
 </body>
 </html>
