@@ -18,68 +18,117 @@
     --ink:#172033;
     --muted:#5B6577;
     --line:#D9DEE7;
+    --line-soft:#E7EBF1;
     --blue:#3858E9;
     --blue-dark:#2745D0;
     --blue-soft:#E8ECFD;
     --display:"Bricolage Grotesque", system-ui, sans-serif;
     --body:"Public Sans", system-ui, sans-serif;
-    --wrap:1120px;
+    --wrap:1160px;
     --ease:cubic-bezier(.22,.8,.24,1);
+    --shadow-lg:0 1px 2px rgba(23,32,51,.04),0 12px 24px -12px rgba(23,32,51,.12),0 40px 80px -40px rgba(23,32,51,.25);
   }
   *{box-sizing:border-box}
   html{scroll-behavior:smooth;scroll-padding-top:90px}
-  body{margin:0;background:var(--bg);color:var(--ink);font:400 1.0625rem/1.65 var(--body);-webkit-font-smoothing:antialiased}
+  body{margin:0;background:var(--bg);color:var(--ink);font:400 1.0625rem/1.65 var(--body);-webkit-font-smoothing:antialiased;overflow-x:hidden}
   a{color:inherit}
   :focus-visible{outline:3px solid var(--blue);outline-offset:3px;border-radius:4px}
   .wrap{max-width:var(--wrap);margin:0 auto;padding:0 24px}
   h1,h2,h3{font-family:var(--display);line-height:1.08;margin:0;letter-spacing:-.02em}
   p{margin:0}
 
+  /* ---------- page backdrop: soft blue light + dot grid behind the hero ---------- */
+  .backdrop{position:absolute;inset:0 0 auto 0;height:980px;pointer-events:none;z-index:0;overflow:hidden}
+  .backdrop::before{content:"";position:absolute;inset:0;
+    background-image:radial-gradient(circle,#C9D1E0 1px,transparent 1.2px);background-size:22px 22px;
+    -webkit-mask-image:radial-gradient(ellipse 70% 60% at 50% 30%,#000 30%,transparent 75%);
+            mask-image:radial-gradient(ellipse 70% 60% at 50% 30%,#000 30%,transparent 75%)}
+  .backdrop::after{content:"";position:absolute;width:900px;height:900px;left:50%;top:-420px;transform:translateX(-50%);
+    background:radial-gradient(circle,rgba(56,88,233,.16),transparent 62%)}
+  .page{position:relative;z-index:1}
+
   /* ---------- sticky top bar ---------- */
   .topbar{position:sticky;top:0;z-index:20;transition:background .3s,box-shadow .3s}
-  .topbar.scrolled{background:rgba(243,245,248,.86);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);box-shadow:0 1px 0 var(--line)}
-  .top{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:18px 0}
-  .brand{font-family:var(--display);font-weight:700;font-size:1.15rem;text-decoration:none}
-  .nav{display:flex;align-items:center;gap:26px;font-size:.95rem}
-  .nav a:not(.btn){text-decoration:none;color:var(--muted);position:relative;padding:4px 0}
-  .nav a:not(.btn)::after{content:"";position:absolute;left:0;right:0;bottom:-2px;height:2px;background:var(--blue);transform:scaleX(0);transform-origin:left;transition:transform .3s var(--ease)}
+  .topbar.scrolled{background:rgba(243,245,248,.82);backdrop-filter:saturate(1.4) blur(12px);-webkit-backdrop-filter:saturate(1.4) blur(12px);box-shadow:0 1px 0 var(--line)}
+  .top{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:16px 0}
+  .brand{display:flex;align-items:center;gap:10px;font-family:var(--display);font-weight:700;font-size:1.12rem;text-decoration:none}
+  .brand .mark{width:34px;height:34px;border-radius:9px;background:var(--ink);color:#fff;display:grid;place-items:center;font-size:.95rem;font-weight:800;letter-spacing:0}
+  .nav{display:flex;align-items:center;gap:28px;font-size:.95rem}
+  .nav a:not(.btn){text-decoration:none;color:var(--muted);position:relative;padding:4px 0;transition:color .2s}
+  .nav a:not(.btn)::after{content:"";position:absolute;left:0;right:0;bottom:-2px;height:2px;border-radius:2px;background:var(--blue);transform:scaleX(0);transform-origin:left;transition:transform .3s var(--ease)}
   .nav a:not(.btn):hover,.nav a.active{color:var(--ink)}
   .nav a.active::after{transform:scaleX(1)}
-  .btn{display:inline-flex;align-items:center;gap:8px;background:var(--blue);color:#fff;text-decoration:none;font-weight:600;font-size:.95rem;padding:11px 18px;border-radius:6px;white-space:nowrap;transition:background .2s,transform .2s var(--ease),box-shadow .2s}
-  .btn:hover{background:var(--blue-dark);transform:translateY(-2px);box-shadow:0 8px 18px -8px rgba(56,88,233,.6)}
+  .btn{display:inline-flex;align-items:center;gap:8px;background:var(--blue);color:#fff;text-decoration:none;font-weight:600;font-size:.95rem;padding:11px 18px;border-radius:8px;white-space:nowrap;
+       box-shadow:0 1px 0 rgba(255,255,255,.25) inset,0 6px 16px -8px rgba(56,88,233,.7);transition:background .2s,transform .2s var(--ease),box-shadow .2s}
+  .btn:hover{background:var(--blue-dark);transform:translateY(-2px);box-shadow:0 1px 0 rgba(255,255,255,.25) inset,0 12px 22px -10px rgba(56,88,233,.8)}
   .btn:active{transform:translateY(0)}
-  .btn.ghost{background:transparent;color:var(--ink);box-shadow:inset 0 0 0 1.5px var(--ink)}
-  .btn.ghost:hover{background:var(--ink);color:#fff}
+  .btn.ghost{background:var(--surface);color:var(--ink);box-shadow:inset 0 0 0 1px var(--line),0 1px 2px rgba(23,32,51,.06)}
+  .btn.ghost:hover{box-shadow:inset 0 0 0 1px var(--ink),0 8px 18px -10px rgba(23,32,51,.35)}
   .btn svg{flex:none}
 
+  /* ---------- hero intro line above the editor ---------- */
+  .intro{display:flex;align-items:center;justify-content:space-between;gap:20px;margin:28px 0 22px;flex-wrap:wrap}
+  .status{display:inline-flex;align-items:center;gap:10px;background:var(--surface);border:1px solid var(--line);border-radius:999px;padding:6px 14px 6px 8px;font-size:.9rem;box-shadow:0 1px 2px rgba(23,32,51,.05)}
+  .status .dot{width:22px;height:22px;border-radius:50%;background:#E3F6EA;display:grid;place-items:center}
+  .status .dot::after{content:"";width:8px;height:8px;border-radius:50%;background:#1E9E57;box-shadow:0 0 0 0 rgba(30,158,87,.5);animation:ping 2s infinite}
+  @keyframes ping{0%{box-shadow:0 0 0 0 rgba(30,158,87,.45)}70%{box-shadow:0 0 0 7px rgba(30,158,87,0)}100%{box-shadow:0 0 0 0 rgba(30,158,87,0)}}
+  .where{color:var(--muted);font-size:.92rem}
+
   /* ---------- hero: the page as a block editor ---------- */
-  .editor{margin:10px 0 0;background:var(--surface);border:1px solid var(--line);border-radius:10px;overflow:hidden;
-          display:grid;grid-template-columns:230px 1fr;box-shadow:0 30px 60px -40px rgba(23,32,51,.35)}
-  .editor-bar{grid-column:1/-1;display:flex;align-items:center;gap:14px;padding:10px 16px;border-bottom:1px solid var(--line);font-size:.85rem;color:var(--muted)}
-  .editor-bar .wp{width:28px;height:28px;border-radius:5px;background:var(--ink);display:grid;place-items:center}
-  .editor-bar .doc{margin:0 auto;color:var(--ink);font-weight:500}
-  .editor-bar .pub{background:var(--blue);color:#fff;padding:5px 12px;border-radius:4px;font-weight:600;min-width:84px;text-align:center}
-  .listview{border-right:1px solid var(--line);padding:18px 14px;font-size:.9rem}
-  .listview p{color:var(--muted);font-size:.8rem;margin-bottom:10px;font-weight:600}
+  .editor{background:var(--surface);border:1px solid var(--line);border-radius:14px;overflow:hidden;
+          display:grid;grid-template-columns:220px 1fr 250px;box-shadow:var(--shadow-lg)}
+  .editor-bar{grid-column:1/-1;display:flex;align-items:center;gap:14px;padding:10px 16px;border-bottom:1px solid var(--line-soft);font-size:.85rem;color:var(--muted);background:#FBFCFD}
+  .editor-bar .wp{width:30px;height:30px;border-radius:7px;background:var(--ink);display:grid;place-items:center}
+  .editor-bar .tool{width:30px;height:30px;border-radius:6px;display:grid;place-items:center;color:var(--ink)}
+  .editor-bar .tool.plus{background:var(--blue);color:#fff}
+  .editor-bar .doc{margin:0 auto;color:var(--ink);font-weight:500;background:var(--bg);padding:5px 14px;border-radius:7px}
+  .editor-bar .pub{background:var(--blue);color:#fff;padding:6px 14px;border-radius:6px;font-weight:600;min-width:92px;text-align:center}
+  .listview{border-right:1px solid var(--line-soft);padding:18px 12px;font-size:.9rem;background:#FCFDFE}
+  .panel-title{color:var(--muted);font-size:.8rem;margin:0 0 10px 8px;font-weight:600}
   .listview ol{list-style:none;margin:0;padding:0}
-  .listview li a{display:flex;align-items:center;gap:10px;padding:7px 10px;border-radius:4px;text-decoration:none;color:var(--ink);transition:background .2s,padding .2s var(--ease)}
+  .listview li a{display:flex;align-items:center;gap:10px;padding:7px 10px;border-radius:6px;text-decoration:none;color:var(--ink);transition:background .2s,padding .2s var(--ease)}
   .listview li a:hover{background:var(--bg);padding-left:14px}
   .listview li a[aria-current]{background:var(--blue);color:#fff}
+  .listview li.sub a{padding-left:30px;color:var(--muted);font-size:.85rem}
   .listview svg{flex:none}
-  .canvas{padding:104px 64px 72px;position:relative}
+  .canvas{padding:100px 60px 64px;position:relative}
   .block{position:relative;outline:1.5px solid var(--blue);outline-offset:14px;border-radius:2px;transition:outline-color .4s}
-  .toolbar{position:absolute;top:-62px;left:-14px;display:flex;background:var(--surface);border:1px solid var(--ink);border-radius:4px;font-size:.8rem;font-weight:600;transition:opacity .35s var(--ease),transform .35s var(--ease)}
+  .toolbar{position:absolute;top:-62px;left:-14px;display:flex;background:var(--surface);border:1px solid var(--ink);border-radius:6px;font-size:.8rem;font-weight:600;transition:opacity .35s var(--ease),transform .35s var(--ease);box-shadow:0 6px 14px -8px rgba(23,32,51,.4)}
   .toolbar span{padding:6px 10px;border-right:1px solid var(--line)}
   .toolbar span:last-child{border-right:0}
-  .hero-title{font-size:clamp(2.6rem,6.4vw,5.4rem);font-weight:800;max-width:13ch}
+  .hero-title{font-size:clamp(2.6rem,5.6vw,4.9rem);font-weight:800;max-width:13ch;letter-spacing:-.035em}
+  .hero-title .hl{background:linear-gradient(transparent 62%,rgba(56,88,233,.18) 62%)}
   .caret{display:inline-block;width:3px;height:.85em;background:var(--blue);vertical-align:-.05em;margin-left:4px;animation:blink 1.1s steps(1) infinite}
   @keyframes blink{50%{opacity:0}}
-  .hero-sub{margin-top:44px;max-width:56ch;font-size:1.15rem;color:var(--muted)}
-  .hero-actions{display:flex;flex-wrap:wrap;gap:12px;margin-top:30px}
-  .inserter{margin-top:46px;display:flex;align-items:center;gap:10px;color:var(--muted);font-size:.9rem}
-  .inserter b{width:26px;height:26px;border-radius:4px;background:var(--ink);color:#fff;display:grid;place-items:center;font-weight:500}
+  .hero-sub{margin-top:42px;max-width:54ch;font-size:1.13rem;color:var(--muted)}
+  .hero-actions{display:flex;flex-wrap:wrap;gap:12px;margin-top:28px}
+  .inserter{margin-top:42px;display:flex;align-items:center;gap:10px;color:#8A93A5;font-size:.9rem}
+  .inserter b{width:26px;height:26px;border-radius:6px;background:var(--ink);color:#fff;display:grid;place-items:center;font-weight:500}
 
-  /* hero load sequence: heading types itself, then the block gets selected, then the rest appears */
+  /* inspector: the block settings sidebar */
+  .inspector{border-left:1px solid var(--line-soft);background:#FCFDFE;font-size:.85rem}
+  .tabs{display:flex;border-bottom:1px solid var(--line-soft)}
+  .tabs span{flex:1;text-align:center;padding:11px 0;color:var(--muted);font-weight:600}
+  .tabs span.on{color:var(--ink);box-shadow:inset 0 -2px 0 var(--blue)}
+  .insp{padding:16px}
+  .insp + .insp{border-top:1px solid var(--line-soft)}
+  .insp-head{display:flex;gap:10px;align-items:flex-start}
+  .insp-head .ic{width:32px;height:32px;border-radius:7px;background:var(--blue-soft);color:var(--blue);display:grid;place-items:center;flex:none;font-weight:800;font-family:var(--display)}
+  .insp-head b{display:block;font-size:.9rem}
+  .insp-head small{color:var(--muted);line-height:1.45;display:block;margin-top:2px}
+  .insp label{display:block;font-weight:600;font-size:.78rem;color:var(--muted);margin-bottom:8px}
+  .seg{display:flex;border:1px solid var(--line);border-radius:6px;overflow:hidden}
+  .seg span{flex:1;text-align:center;padding:5px 0;font-weight:600;font-size:.78rem;border-right:1px solid var(--line)}
+  .seg span:last-child{border-right:0}
+  .seg span.on{background:var(--ink);color:#fff}
+  .swatches{display:flex;gap:8px}
+  .swatches i{width:24px;height:24px;border-radius:50%;box-shadow:inset 0 0 0 1px rgba(0,0,0,.08)}
+  .swatches i.on{box-shadow:0 0 0 2px #fff,0 0 0 4px var(--ink)}
+  .row{display:flex;justify-content:space-between;align-items:center;margin-top:12px}
+  .toggle{width:34px;height:20px;border-radius:999px;background:var(--blue);position:relative}
+  .toggle::after{content:"";position:absolute;right:3px;top:3px;width:14px;height:14px;border-radius:50%;background:#fff}
+
+  /* hero load sequence */
   .js .block{outline-color:transparent}
   .js .toolbar{opacity:0;transform:translateY(6px)}
   .js .hero-rest > *{opacity:0;transform:translateY(14px);transition:opacity .6s var(--ease),transform .6s var(--ease)}
@@ -91,105 +140,169 @@
   .js .is-done .hero-rest > :nth-child(2){transition-delay:.12s}
   .js .is-done .hero-rest > :nth-child(3){transition-delay:.24s}
 
+  /* ---------- tools strip ---------- */
+  .tools{margin-top:56px;display:flex;align-items:center;gap:28px}
+  .tools > p{flex:none;color:var(--muted);font-size:.92rem;max-width:12ch;line-height:1.35}
+  .marquee{flex:1;overflow:hidden;-webkit-mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent);mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent)}
+  .track{display:flex;gap:12px;width:max-content;animation:slide 38s linear infinite}
+  .marquee:hover .track{animation-play-state:paused}
+  @keyframes slide{to{transform:translateX(-50%)}}
+  .chip{display:inline-flex;align-items:center;gap:8px;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:9px 14px;font-weight:600;font-size:.92rem;white-space:nowrap}
+  .chip i{width:10px;height:10px;border-radius:3px}
+
   /* ---------- sections ---------- */
-  section{padding:120px 0 0}
-  .sec-head{display:grid;grid-template-columns:1fr 1.3fr;gap:40px;align-items:end;margin-bottom:48px}
-  .sec-head h2{font-size:clamp(2rem,4vw,3rem);font-weight:700}
+  section{padding:128px 0 0}
+  .sec-head{display:grid;grid-template-columns:1fr 1.25fr;gap:40px;align-items:end;margin-bottom:44px}
+  .sec-head h2{font-size:clamp(2.1rem,4vw,3.1rem);font-weight:700;letter-spacing:-.03em}
   .sec-head p{color:var(--muted);max-width:52ch}
 
-  /* projects: rows with a browser frame; the screenshot scrolls on hover */
-  .project{display:grid;grid-template-columns:1.1fr 1fr;gap:56px;align-items:center;padding:52px 0;border-top:1px solid var(--line)}
-  .project:nth-child(even) .browser{order:2}
-  .browser{margin:0;background:var(--surface);border:1px solid var(--line);border-radius:10px;overflow:hidden;
+  /* projects */
+  .project{display:grid;grid-template-columns:1.12fr 1fr;gap:60px;align-items:center;padding:28px 0 64px}
+  .project + .project{border-top:1px solid var(--line);padding-top:64px}
+  .project.flip .browser{order:2}
+  .browser{margin:0;background:var(--surface);border:1px solid var(--line);border-radius:14px;overflow:hidden;box-shadow:var(--shadow-lg);
            transition:transform .5s var(--ease),box-shadow .5s var(--ease)}
-  .browser:hover{transform:translateY(-6px);box-shadow:0 30px 50px -30px rgba(23,32,51,.45)}
-  .url{display:flex;align-items:center;gap:8px;padding:9px 12px;border-bottom:1px solid var(--line);font-size:.8rem;color:var(--muted)}
-  .url span{flex:1;background:var(--bg);border-radius:999px;padding:4px 12px}
-  .shot{position:relative;aspect-ratio:16/10;overflow:hidden;background:var(--bg);display:grid;place-items:center}
-  .shot img{position:absolute;top:0;left:0;width:100%;height:auto;min-height:100%;object-fit:cover;object-position:top;transition:transform 5s linear}
-  .shot .ph{font-family:var(--display);font-weight:700;font-size:clamp(1.4rem,2.6vw,2rem);color:var(--line)}
-  .shot.featured{background:var(--blue-soft)}
-  .shot.featured .ph{color:#b9c4f6}
-  .hint{position:absolute;right:12px;bottom:12px;background:rgba(23,32,51,.82);color:#fff;font-size:.75rem;padding:5px 10px;border-radius:999px;opacity:0;transition:opacity .3s}
+  .browser:hover{transform:translateY(-6px) rotate(-.4deg)}
+  .url{display:flex;align-items:center;gap:10px;padding:10px 14px;border-bottom:1px solid var(--line-soft);font-size:.8rem;color:var(--muted);background:#FBFCFD}
+  .url .lights{display:flex;gap:6px}
+  .url .lights i{width:9px;height:9px;border-radius:50%;background:var(--line)}
+  .url .addr{flex:1;background:var(--bg);border-radius:7px;padding:4px 12px;display:flex;align-items:center;gap:6px}
+  .shot{position:relative;aspect-ratio:16/10;overflow:hidden;background:var(--bg)}
+  .shot img{position:absolute;top:0;left:0;width:100%;height:auto;min-height:100%;object-fit:cover;object-position:top;transition:transform 5s linear;z-index:2}
+  .hint{position:absolute;z-index:3;right:12px;bottom:12px;background:rgba(23,32,51,.82);color:#fff;font-size:.75rem;padding:5px 10px;border-radius:999px;opacity:0;transition:opacity .3s}
   .browser:hover .hint{opacity:1}
-  .project .kind{color:var(--blue);font-weight:600;font-size:.95rem;margin-bottom:10px}
-  .project h3{font-size:clamp(1.6rem,2.8vw,2.2rem);font-weight:700;margin-bottom:14px}
-  .project p.lede{color:var(--muted);margin-bottom:18px}
-  .project ul{margin:0 0 22px;padding-left:1.1em}
-  .project li{margin-bottom:6px}
-  .project li::marker{color:var(--blue)}
-  .stack{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:22px}
-  .stack span{font-size:.82rem;font-weight:500;padding:4px 10px;border-radius:999px;background:var(--surface);border:1px solid var(--line)}
+
+  /* designed preview shown until a real screenshot is added */
+  .mock{position:absolute;inset:0;display:flex;flex-direction:column;background:var(--m-bg);color:var(--m-ink);font-family:var(--display)}
+  .mock .m-nav{display:flex;align-items:center;justify-content:space-between;padding:4.5% 6% 0;font-size:clamp(.6rem,1.1vw,.8rem);font-weight:700;letter-spacing:.02em}
+  .mock .m-nav em{font-style:normal;display:flex;gap:10px;opacity:.6;font-weight:500}
+  .mock .m-hero{flex:1;min-height:0;display:grid;grid-template-columns:1.2fr 1fr;gap:6%;align-items:center;padding:0 6%}
+  .mock .m-hero h4{margin:0;font-size:clamp(1rem,2.4vw,1.75rem);line-height:1.05;letter-spacing:-.02em}
+  .mock .m-hero .m-btn{display:inline-block;margin-top:10%;background:var(--m-accent);color:var(--m-btn-ink);font-size:clamp(.55rem,.95vw,.72rem);padding:6px 12px;border-radius:999px;font-weight:700}
+  .mock .m-art{height:78%;aspect-ratio:1;justify-self:end;border-radius:var(--m-radius);background:var(--m-art)}
+  .mock .m-row{display:grid;grid-template-columns:repeat(4,1fr);gap:3%;padding:0 6% 5%}
+  .mock .m-row i{aspect-ratio:1/.7;border-radius:var(--m-card-r);background:var(--m-card)}
+  .mock.itramh{--m-bg:#1E1622;--m-ink:#F3E6D2;--m-accent:#C9A46A;--m-btn-ink:#1E1622;--m-radius:999px;--m-card-r:12px;--m-card:rgba(243,230,210,.08);
+    --m-art:radial-gradient(circle at 50% 40%,#E9C98F,#7A5A35 55%,#2B1F2E 75%)}
+  .mock.medizamed{--m-bg:#F2F8F8;--m-ink:#0E3B43;--m-accent:#0E7C86;--m-btn-ink:#fff;--m-radius:16px;--m-card-r:10px;--m-card:#fff;
+    --m-art:linear-gradient(135deg,#BFE3E5,#0E7C86)}
+  .mock.ishaya{--m-bg:#F4F1EC;--m-ink:#111;--m-accent:#111;--m-btn-ink:#fff;--m-radius:2px;--m-card-r:0;--m-card:#E2DDD5;
+    --m-art:linear-gradient(160deg,#D9D3C9,#8F877B)}
+
+  .project .kind{display:inline-flex;align-items:center;gap:8px;color:var(--blue);font-weight:600;font-size:.92rem;margin-bottom:12px}
+  .project .kind i{width:8px;height:8px;border-radius:2px;background:currentColor}
+  .project h3{font-size:clamp(1.7rem,2.8vw,2.3rem);font-weight:700;margin-bottom:14px;letter-spacing:-.03em}
+  .project p.lede{color:var(--muted);margin-bottom:20px}
+  .project ul{list-style:none;margin:0 0 24px;padding:0;display:grid;gap:8px}
+  .project li{display:flex;gap:10px;align-items:flex-start}
+  .project li svg{flex:none;margin-top:4px;color:var(--blue)}
+  .stack{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:24px}
+  .stack span{font-size:.82rem;font-weight:500;padding:4px 11px;border-radius:999px;background:var(--surface);border:1px solid var(--line)}
   .visit{display:inline-flex;align-items:center;gap:6px;font-weight:600;text-decoration:none;border-bottom:1.5px solid currentColor;padding-bottom:2px;transition:color .2s}
   .visit:hover{color:var(--blue)}
 
   /* services */
-  .services{display:grid;grid-template-columns:repeat(2,1fr);gap:0 56px}
-  .service{position:relative;padding:26px 0;border-top:1px solid var(--line)}
-  .service::before{content:"";position:absolute;left:0;top:-1px;height:2px;width:100%;background:var(--blue);transform:scaleX(0);transform-origin:left;transition:transform .5s var(--ease)}
-  .service:hover::before{transform:scaleX(1)}
-  .service h3{font-size:1.3rem;font-weight:700;margin-bottom:8px}
-  .service p{color:var(--muted);max-width:48ch}
+  .services{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+  .service{position:relative;background:var(--surface);border:1px solid var(--line-soft);border-radius:14px;padding:26px 24px 28px;transition:transform .35s var(--ease),border-color .35s,box-shadow .35s}
+  .service:hover{transform:translateY(-4px);border-color:#C7D0F8;box-shadow:0 18px 36px -24px rgba(56,88,233,.45)}
+  .service .ic{width:44px;height:44px;border-radius:11px;background:var(--blue-soft);color:var(--blue);display:grid;place-items:center;margin-bottom:18px;transition:background .3s,color .3s}
+  .service:hover .ic{background:var(--blue);color:#fff}
+  .service h3{font-size:1.22rem;font-weight:700;margin-bottom:8px}
+  .service p{color:var(--muted);font-size:.98rem}
 
-  /* experience: a real sequence */
-  .timeline{list-style:none;margin:0;padding:0;border-left:2px solid var(--line);max-width:720px}
-  .timeline li{position:relative;padding:0 0 34px 30px}
-  .timeline li::before{content:"";position:absolute;left:-7px;top:8px;width:12px;height:12px;border-radius:50%;background:var(--bg);border:2px solid var(--muted)}
-  .timeline li.now::before{background:var(--blue);border-color:var(--blue);animation:pulse 2.4s infinite}
-  @keyframes pulse{0%{box-shadow:0 0 0 0 rgba(56,88,233,.5)}70%{box-shadow:0 0 0 10px rgba(56,88,233,0)}100%{box-shadow:0 0 0 0 rgba(56,88,233,0)}}
-  .timeline h3{font-size:1.25rem;font-weight:700}
-  .timeline .when{color:var(--muted);font-size:.92rem;margin:2px 0 6px}
+  /* process: a real sequence, so numbered */
+  .steps{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(4,1fr);gap:16px;counter-reset:s;position:relative}
+  .steps::before{content:"";position:absolute;left:24px;right:24px;top:23px;height:2px;background:repeating-linear-gradient(90deg,var(--line) 0 8px,transparent 8px 14px)}
+  .steps li{position:relative;counter-increment:s}
+  .steps li::before{content:counter(s);display:grid;place-items:center;width:48px;height:48px;border-radius:50%;background:var(--surface);border:2px solid var(--blue);color:var(--blue);font-family:var(--display);font-weight:800;font-size:1.1rem;margin-bottom:20px;position:relative}
+  .steps li:first-child::before{background:var(--blue);color:#fff}
+  .steps h3{font-size:1.15rem;font-weight:700;margin-bottom:6px}
+  .steps p{color:var(--muted);font-size:.96rem;max-width:30ch}
+
+  /* experience */
+  .timeline{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:1fr 1fr;gap:16px}
+  .timeline li{background:var(--surface);border:1px solid var(--line-soft);border-radius:14px;padding:24px 26px}
+  .timeline .when{display:inline-flex;align-items:center;gap:8px;color:var(--muted);font-size:.88rem;margin-bottom:10px;font-weight:500}
+  .timeline .now .when{color:#1E9E57}
+  .timeline .now .when::before{content:"";width:8px;height:8px;border-radius:50%;background:#1E9E57;animation:ping 2s infinite}
+  .timeline h3{font-size:1.25rem;font-weight:700;margin-bottom:6px}
+  .timeline p{color:var(--muted)}
 
   /* contact */
-  .contact{margin:120px 0 0;background:var(--ink);color:#fff;border-radius:10px;padding:72px 64px;display:grid;grid-template-columns:1.4fr 1fr;gap:40px;align-items:end;position:relative;overflow:hidden}
-  .contact::after{content:"";position:absolute;width:420px;height:420px;right:-140px;top:-180px;border-radius:50%;background:radial-gradient(circle,rgba(56,88,233,.45),transparent 65%);pointer-events:none}
+  .contact{margin:128px 0 0;background:var(--ink);color:#fff;border-radius:20px;padding:76px 64px;display:grid;grid-template-columns:1.4fr 1fr;gap:40px;align-items:end;position:relative;overflow:hidden}
+  .contact::before{content:"";position:absolute;inset:0;background-image:radial-gradient(circle,rgba(255,255,255,.09) 1px,transparent 1.2px);background-size:22px 22px;
+    -webkit-mask-image:linear-gradient(120deg,transparent 30%,#000);mask-image:linear-gradient(120deg,transparent 30%,#000)}
+  .contact::after{content:"";position:absolute;width:520px;height:520px;right:-160px;top:-220px;border-radius:50%;background:radial-gradient(circle,rgba(56,88,233,.55),transparent 65%);pointer-events:none}
   .contact > *{position:relative;z-index:1}
-  .contact h2{font-size:clamp(2.2rem,4.6vw,3.6rem);font-weight:800}
+  .contact h2{font-size:clamp(2.2rem,4.6vw,3.6rem);font-weight:800;letter-spacing:-.03em}
   .contact p{color:#C3CAD8;margin-top:16px;max-width:46ch}
   .contact .actions{display:flex;flex-direction:column;gap:12px;align-items:flex-start}
-  .contact .btn.ghost{color:#fff;box-shadow:inset 0 0 0 1.5px #fff}
+  .contact .btn.ghost{background:transparent;color:#fff;box-shadow:inset 0 0 0 1.5px rgba(255,255,255,.7)}
   .contact .btn.ghost:hover{background:#fff;color:var(--ink)}
   footer{padding:36px 0 48px;color:var(--muted);font-size:.9rem;display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
+  footer a{text-decoration:none}
+  footer a:hover{color:var(--ink)}
 
   /* scroll reveal */
   .js .reveal{opacity:0;transform:translateY(28px);transition:opacity .8s var(--ease),transform .8s var(--ease)}
   .js .reveal.in{opacity:1;transform:none}
+  .js .stagger > *{opacity:0;transform:translateY(18px);transition:opacity .6s var(--ease),transform .6s var(--ease)}
+  .js .stagger.in > *{opacity:1;transform:none}
+  .js .stagger.in > :nth-child(2){transition-delay:.07s}
+  .js .stagger.in > :nth-child(3){transition-delay:.14s}
+  .js .stagger.in > :nth-child(4){transition-delay:.21s}
+  .js .stagger.in > :nth-child(5){transition-delay:.28s}
+  .js .stagger.in > :nth-child(6){transition-delay:.35s}
 
   /* ---------- responsive ---------- */
+  @media (max-width:1100px){
+    .editor{grid-template-columns:200px 1fr}
+    .inspector{display:none}
+  }
   @media (max-width:900px){
     .editor{grid-template-columns:1fr}
     .listview{display:none}
     .canvas{padding:92px 28px 48px}
-    .sec-head,.project,.services,.contact{grid-template-columns:1fr}
+    .sec-head,.project,.contact,.timeline{grid-template-columns:1fr}
+    .services{grid-template-columns:1fr 1fr}
+    .steps{grid-template-columns:1fr 1fr;row-gap:36px}
+    .steps::before{display:none}
     .project{gap:28px}
-    .project:nth-child(even) .browser{order:0}
-    .contact{padding:48px 28px}
+    .project.flip .browser{order:0}
+    .contact{padding:52px 28px}
+    .tools{flex-direction:column;align-items:flex-start;gap:14px}
+    .tools > p{max-width:none}
+    .marquee{width:100%}
   }
   @media (max-width:640px){
     .nav a:not(.btn){display:none}
     .nav .btn{padding:9px 13px;font-size:.88rem}
-    .brand{font-size:1.05rem}
-    .editor-bar .doc{display:none}
+    .brand span:last-child{display:none}
+    .editor-bar .doc,.editor-bar .tool:not(.plus){display:none}
     .toolbar span:nth-child(n+3){display:none}
-    section{padding-top:84px}
+    .services,.steps{grid-template-columns:1fr}
+    section{padding-top:92px}
   }
   @media (prefers-reduced-motion:reduce){
     *,*::before,*::after{animation:none!important;transition:none!important}
     html{scroll-behavior:auto}
-    .js .reveal,.js .hero-rest > *,.js .toolbar{opacity:1;transform:none}
+    .js .reveal,.js .stagger > *,.js .hero-rest > *,.js .toolbar{opacity:1;transform:none}
     .js .block{outline-color:var(--blue)}
   }
 </style>
 </head>
 <body>
+<div class="backdrop" aria-hidden="true"></div>
+<div class="page">
 
 <div class="topbar" id="topbar">
   <div class="wrap">
     <header class="top">
-      <a class="brand" href="#top">Shridhar Kakadiya</a>
+      <a class="brand" href="#top"><span class="mark">SK</span><span>Shridhar Kakadiya</span></a>
       <nav class="nav" aria-label="Main">
         <a href="#work">Work</a>
         <a href="#services">Services</a>
+        <a href="#process">Process</a>
         <a href="#experience">Experience</a>
         <a class="btn" href="https://www.fiverr.com/shri_kakadiya" target="_blank" rel="noopener">Hire me on Fiverr</a>
       </nav>
@@ -198,21 +311,32 @@
 </div>
 
 <div class="wrap">
+  <div class="intro">
+    <span class="status"><span class="dot" aria-hidden="true"></span>Available for new projects</span>
+    <span class="where">WordPress · WooCommerce · Shopify — Surat, India</span>
+  </div>
+
   <!-- HERO: styled like the WordPress block editor -->
   <div class="editor" id="hero">
     <div class="editor-bar" aria-hidden="true">
-      <span class="wp"><svg width="16" height="16" viewBox="0 0 24 24" fill="#fff"><path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20Zm-8.5 10c0-1.2.3-2.4.7-3.4l4 11A8.5 8.5 0 0 1 3.5 12Zm8.5 8.5c-.8 0-1.6-.1-2.4-.4l2.5-7.3 2.6 7.1v.1c-.9.3-1.8.5-2.7.5Zm1.2-12.5c.5 0 1-.1 1-.1.5 0 .4-.7 0-.7 0 0-1.4.1-2.3.1-.9 0-2.3-.1-2.3-.1-.5 0-.5.7 0 .7l.9.1 1.3 3.6-1.8 5.5-3-9.1c.5 0 1-.1 1-.1.5 0 .4-.7 0-.7 0 0-1.4.1-2.3.1h-.6A8.5 8.5 0 0 1 17.8 6h-.1c-.9 0-1.5.8-1.5 1.6 0 .7.4 1.400 .9 2.1.3.6.7 1.4.7 2.5 0 .8-.3 1.7-.7 2.9l-.9 3.1-3-9.2Zm3.1 11.3 2.6-7.5c.5-1.2.6-2.2.6-3 0-.3 0-.6-.1-.9a8.5 8.5 0 0 1-3.1 11.4Z"/></svg></span>
-      <span>Undo · Redo</span>
+      <span class="wp"><svg width="17" height="17" viewBox="0 0 24 24" fill="#fff"><path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20Zm-8.5 10c0-1.2.3-2.4.7-3.4l4 11A8.5 8.5 0 0 1 3.5 12Zm8.5 8.5c-.8 0-1.6-.1-2.4-.4l2.5-7.3 2.6 7.1v.1c-.9.3-1.8.5-2.7.5Zm1.2-12.5c.5 0 1-.1 1-.1.5 0 .4-.7 0-.7 0 0-1.4.1-2.3.1-.9 0-2.3-.1-2.3-.1-.5 0-.5.7 0 .7l.9.1 1.3 3.6-1.8 5.5-3-9.1c.5 0 1-.1 1-.1.5 0 .4-.7 0-.7 0 0-1.4.1-2.3.1h-.6A8.5 8.5 0 0 1 17.8 6h-.1c-.9 0-1.5.8-1.5 1.6 0 .7.4 1.4.9 2.1.3.6.7 1.4.7 2.5 0 .8-.3 1.7-.7 2.9l-.9 3.1-3-9.2Zm3.1 11.3 2.6-7.5c.5-1.2.6-2.2.6-3 0-.3 0-.6-.1-.9a8.5 8.5 0 0 1-3.1 11.4Z"/></svg></span>
+      <span class="tool plus"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M11 5h2v6h6v2h-6v6h-2v-6H5v-2h6z"/></svg></span>
+      <span class="tool"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M9 7 4 12l5 5 1.4-1.4L7.8 13H15a3 3 0 0 1 0 6h-2v2h2a5 5 0 0 0 0-10H7.8l2.6-2.6z"/></svg></span>
+      <span class="tool"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M4 6h16v2H4zm0 5h16v2H4zm0 5h16v2H4z"/></svg></span>
       <span class="doc">Portfolio — Home</span>
       <span class="pub" id="pub">Published</span>
     </div>
 
     <nav class="listview" aria-label="Sections">
-      <p>List view</p>
+      <p class="panel-title">List view</p>
       <ol>
         <li><a href="#top" aria-current="true"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M6 5h12v2H13v12h-2V7H6z"/></svg>Intro</a></li>
         <li><a href="#work"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M4 5h16v14H4zm2 2v10h12V7z"/></svg>Selected work</a></li>
-        <li><a href="#services"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M4 6h16v2H4zm0 5h16v2H4zm0 5h10v2H4z"/></svg>Services</a></li>
+        <li class="sub"><a href="#itramh">Itramh Aroma</a></li>
+        <li class="sub"><a href="#medizamed">Medizamed</a></li>
+        <li class="sub"><a href="#ishaya">Ishaya</a></li>
+        <li><a href="#services"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M4 4h7v7H4zm9 0h7v7h-7zM4 13h7v7H4zm9 0h7v7h-7z"/></svg>Services</a></li>
+        <li><a href="#process"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M4 6h16v2H4zm0 5h16v2H4zm0 5h10v2H4z"/></svg>Process</a></li>
         <li><a href="#experience"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7 4h2v16H7zm4 3h8v2h-8zm0 8h8v2h-8z"/></svg>Experience</a></li>
         <li><a href="#contact"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M4 6h16v12H4zm2 2v.5l6 4 6-4V8l-6 4z"/></svg>Contact</a></li>
       </ol>
@@ -232,13 +356,66 @@
         <div class="inserter" aria-hidden="true"><b>+</b> Type / to choose a block</div>
       </div>
     </div>
+
+    <aside class="inspector" aria-hidden="true">
+      <div class="tabs"><span>Page</span><span class="on">Block</span></div>
+      <div class="insp">
+        <div class="insp-head"><span class="ic">H</span><div><b>Heading</b><small>Introduce new sections and organise content.</small></div></div>
+      </div>
+      <div class="insp">
+        <label>Text colour</label>
+        <div class="swatches"><i class="on" style="background:#172033"></i><i style="background:#3858E9"></i><i style="background:#5B6577"></i><i style="background:#E8ECFD"></i><i style="background:#fff"></i></div>
+      </div>
+      <div class="insp">
+        <label>Font size</label>
+        <div class="seg"><span>S</span><span>M</span><span>L</span><span>XL</span><span class="on">XXL</span></div>
+        <div class="row"><label style="margin:0">Fluid typography</label><span class="toggle"></span></div>
+      </div>
+      <div class="insp">
+        <label>Appearance</label>
+        <div class="seg"><span>Regular</span><span>Bold</span><span class="on">Extra bold</span></div>
+      </div>
+    </aside>
+  </div>
+
+  <div class="tools reveal">
+    <p>Tools I use every day</p>
+    <div class="marquee" aria-label="WordPress, WooCommerce, Gutenberg, PHP, Shopify Liquid, JavaScript, React blocks, MySQL, Git and GitHub, Figma, Hostinger, Google Search Console">
+      <div class="track" aria-hidden="true">
+        <span class="chip"><i style="background:#21759B"></i>WordPress</span>
+        <span class="chip"><i style="background:#7F54B3"></i>WooCommerce</span>
+        <span class="chip"><i style="background:#3858E9"></i>Gutenberg</span>
+        <span class="chip"><i style="background:#777BB4"></i>PHP</span>
+        <span class="chip"><i style="background:#95BF47"></i>Shopify Liquid</span>
+        <span class="chip"><i style="background:#E8C547"></i>JavaScript</span>
+        <span class="chip"><i style="background:#58C4DC"></i>React blocks</span>
+        <span class="chip"><i style="background:#00758F"></i>MySQL</span>
+        <span class="chip"><i style="background:#172033"></i>Git &amp; GitHub</span>
+        <span class="chip"><i style="background:#F24E1E"></i>Figma</span>
+        <span class="chip"><i style="background:#673DE6"></i>Hostinger</span>
+        <span class="chip"><i style="background:#4285F4"></i>Search Console</span>
+        <!-- duplicate set for a seamless loop -->
+        <span class="chip"><i style="background:#21759B"></i>WordPress</span>
+        <span class="chip"><i style="background:#7F54B3"></i>WooCommerce</span>
+        <span class="chip"><i style="background:#3858E9"></i>Gutenberg</span>
+        <span class="chip"><i style="background:#777BB4"></i>PHP</span>
+        <span class="chip"><i style="background:#95BF47"></i>Shopify Liquid</span>
+        <span class="chip"><i style="background:#E8C547"></i>JavaScript</span>
+        <span class="chip"><i style="background:#58C4DC"></i>React blocks</span>
+        <span class="chip"><i style="background:#00758F"></i>MySQL</span>
+        <span class="chip"><i style="background:#172033"></i>Git &amp; GitHub</span>
+        <span class="chip"><i style="background:#F24E1E"></i>Figma</span>
+        <span class="chip"><i style="background:#673DE6"></i>Hostinger</span>
+        <span class="chip"><i style="background:#4285F4"></i>Search Console</span>
+      </div>
+    </div>
   </div>
 
   <!-- WORK -->
   <section id="work">
     <div class="sec-head reveal">
       <h2>Selected work</h2>
-      <p>Live projects for real businesses: a perfume store, a pharma exporter and a fashion label.</p>
+      <p>Live projects for real businesses: a perfume store, a pharma exporter and a fashion label. Hover a preview to scroll the page.</p>
     </div>
 
     <div class="projects">
@@ -246,69 +423,82 @@
         TO ADD A NEW PROJECT: copy one whole <article class="project reveal"> ... </article> block,
         paste it where you want it, and change the text, link and image.
         Put the screenshot in the images/ folder. A full-page (tall) screenshot scrolls on hover.
+        Add class "flip" to every second project to put the picture on the right.
       -->
 
-      <article class="project reveal">
+      <article class="project reveal" id="itramh">
         <figure class="browser">
-          <div class="url" aria-hidden="true"><span>Itramh Aroma</span></div>
-          <div class="shot featured">
-            <span class="ph">Itramh Aroma</span>
+          <div class="url" aria-hidden="true"><span class="lights"><i></i><i></i><i></i></span><span class="addr">🔒 itramh aroma</span></div>
+          <div class="shot">
+            <div class="mock itramh" aria-hidden="true">
+              <div class="m-nav">ITRAMH AROMA <em><span>Shop</span><span>Attar</span><span>Cart</span></em></div>
+              <div class="m-hero"><div><h4>Fragrance that stays with you</h4><span class="m-btn">Shop now</span></div><div class="m-art"></div></div>
+              <div class="m-row"><i></i><i></i><i></i><i></i></div>
+            </div>
             <img src="images/itramh.jpg" alt="Itramh Aroma perfume store homepage" loading="lazy" onerror="this.remove()">
           </div>
         </figure>
         <div>
-          <p class="kind">WooCommerce store</p>
+          <p class="kind"><i></i>WooCommerce store</p>
           <h3>Itramh Aroma</h3>
           <p class="lede">An online perfume store in Surat. I redesigned its pages and am moving it to a block theme the owner can edit without a developer.</p>
           <ul>
-            <li>Full page redesigns for a premium brand feel</li>
-            <li>Fixed AJAX add-to-cart behaviour</li>
-            <li>Migration to a native Gutenberg block theme</li>
-            <li>Theme code cleaned up to WordPress coding standards</li>
+            <li><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="m9.5 16.2-4.2-4.2-1.4 1.4 5.6 5.6L20.1 8.4 18.7 7z"/></svg>Full page redesigns for a premium brand feel</li>
+            <li><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="m9.5 16.2-4.2-4.2-1.4 1.4 5.6 5.6L20.1 8.4 18.7 7z"/></svg>Fixed AJAX add-to-cart behaviour</li>
+            <li><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="m9.5 16.2-4.2-4.2-1.4 1.4 5.6 5.6L20.1 8.4 18.7 7z"/></svg>Migration to a native Gutenberg block theme</li>
+            <li><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="m9.5 16.2-4.2-4.2-1.4 1.4 5.6 5.6L20.1 8.4 18.7 7z"/></svg>Theme code cleaned up to WordPress coding standards</li>
           </ul>
           <div class="stack"><span>WooCommerce</span><span>PHP</span><span>Gutenberg blocks</span><span>Hostinger</span></div>
           <!-- Add the store link: <a class="visit" href="https://YOUR-LINK" target="_blank" rel="noopener">Visit the store</a> -->
         </div>
       </article>
 
-      <article class="project reveal">
+      <article class="project flip reveal" id="medizamed">
         <figure class="browser">
-          <div class="url" aria-hidden="true"><span>medizamed.com</span></div>
+          <div class="url" aria-hidden="true"><span class="lights"><i></i><i></i><i></i></span><span class="addr">🔒 medizamed.com</span></div>
           <div class="shot">
-            <span class="ph">medizamed.com</span>
+            <div class="mock medizamed" aria-hidden="true">
+              <div class="m-nav">MEDIZAMED <em><span>Products</span><span>Export</span><span>Contact</span></em></div>
+              <div class="m-hero"><div><h4>Medicines for 30+ countries</h4><span class="m-btn">Send enquiry</span></div><div class="m-art"></div></div>
+              <div class="m-row"><i></i><i></i><i></i><i></i></div>
+            </div>
             <img src="images/medizamed.jpg" alt="Medizamed pharma export website" loading="lazy" onerror="this.remove()">
           </div>
         </figure>
         <div>
-          <p class="kind">Website, SEO and UX</p>
+          <p class="kind"><i></i>Website, SEO and UX</p>
           <h3>Medizamed</h3>
           <p class="lede">A pharmaceutical distributor that exports to more than 30 countries. I audited the site, then fixed what was costing it enquiries.</p>
           <ul>
-            <li>Full UX and conversion audit, then fixes for broken images, dead buttons and placeholder text</li>
-            <li>Homepage and About copy rewritten for overseas buyers</li>
-            <li>SEO setup for the USA, Middle East and Europe</li>
+            <li><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="m9.5 16.2-4.2-4.2-1.4 1.4 5.6 5.6L20.1 8.4 18.7 7z"/></svg>Full UX and conversion audit, then fixes for broken images, dead buttons and placeholder text</li>
+            <li><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="m9.5 16.2-4.2-4.2-1.4 1.4 5.6 5.6L20.1 8.4 18.7 7z"/></svg>Homepage and About copy rewritten for overseas buyers</li>
+            <li><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="m9.5 16.2-4.2-4.2-1.4 1.4 5.6 5.6L20.1 8.4 18.7 7z"/></svg>SEO setup for the USA, Middle East and Europe</li>
           </ul>
           <div class="stack"><span>WordPress</span><span>SEO</span><span>Copywriting</span><span>UX audit</span></div>
           <a class="visit" href="https://medizamed.com" target="_blank" rel="noopener">Visit medizamed.com</a>
         </div>
       </article>
 
-      <article class="project reveal">
+      <article class="project reveal" id="ishaya">
         <figure class="browser">
-          <div class="url" aria-hidden="true"><span>Ishaya</span></div>
+          <div class="url" aria-hidden="true"><span class="lights"><i></i><i></i><i></i></span><span class="addr">🔒 ishaya</span></div>
           <div class="shot">
-            <span class="ph">Ishaya</span>
+            <div class="mock ishaya" aria-hidden="true">
+              <div class="m-nav">ISHAYA <em><span>New in</span><span>Sets</span><span>Bag</span></em></div>
+              <div class="m-hero"><div><h4>The new season edit</h4><span class="m-btn">Shop the set</span></div><div class="m-art"></div></div>
+              <div class="m-row"><i></i><i></i><i></i><i></i></div>
+            </div>
             <img src="images/ishaya.jpg" alt="Ishaya Shopify store" loading="lazy" onerror="this.remove()">
           </div>
         </figure>
         <div>
-          <p class="kind">Shopify theme</p>
+          <p class="kind"><i></i>Shopify theme</p>
           <h3>Ishaya</h3>
           <p class="lede">A fashion store built on a Shopify theme I wrote from scratch, with an original layout and branding.</p>
           <ul>
-            <li>Custom homepage sections, collection grid and product page</li>
-            <li>A "Shop the set" bundle built into the theme, with no paid app</li>
-            <li>Version-controlled theme on GitHub</li>
+            <li><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="m9.5 16.2-4.2-4.2-1.4 1.4 5.6 5.6L20.1 8.4 18.7 7z"/></svg>Custom homepage sections, collection grid and product page</li>
+            <li><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="m9.5 16.2-4.2-4.2-1.4 1.4 5.6 5.6L20.1 8.4 18.7 7z"/></svg>A "Shop the set" bundle built into the theme, with no paid app</li>
+            <li><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="m9.5 16.2-4.2-4.2-1.4 1.4 5.6 5.6L20.1 8.4 18.7 7z"/></svg>Version-controlled theme on GitHub</li>
           </ul>
           <div class="stack"><span>Shopify Liquid</span><span>Online Store 2.0</span><span>GitHub</span></div>
         </div>
@@ -322,14 +512,28 @@
       <h2>What I can do for you</h2>
       <p>Small fixes or full builds. You get clean code you own, and a site you can update yourself.</p>
     </div>
-    <div class="services reveal">
-      <div class="service"><h3>Custom WordPress plugins</h3><p>Features your theme can't do: catalogs, calculators, import/export tools, admin dashboards.</p></div>
-      <div class="service"><h3>WooCommerce stores</h3><p>New stores, redesigns, checkout and cart fixes, and product setups that sell.</p></div>
-      <div class="service"><h3>Block themes and Gutenberg</h3><p>Custom block themes and blocks, and moving old page-builder sites to native WordPress editing.</p></div>
-      <div class="service"><h3>Shopify themes</h3><p>Custom sections, product pages and theme features, without stacking up monthly apps.</p></div>
-      <div class="service"><h3>Bug fixes and hacked sites</h3><p>Broken layouts, plugin conflicts, slow pages, and malware or spam clean-up.</p></div>
-      <div class="service"><h3>SEO and UX audits</h3><p>A clear list of what's stopping visitors from enquiring or buying, and the fixes for it.</p></div>
+    <div class="services stagger reveal">
+      <div class="service"><span class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M14 2v4h-4V2H8v4H6v6a6 6 0 0 0 5 5.9V22h2v-4.1a6 6 0 0 0 5-5.9V6h-2V2zm2 10a4 4 0 0 1-8 0V8h8z"/></svg></span><h3>Custom WordPress plugins</h3><p>Features your theme can't do: catalogs, calculators, import/export tools, admin dashboards.</p></div>
+      <div class="service"><span class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7 4V2h10v2h4v2h-1l-1.6 13.1A2 2 0 0 1 16.4 21H7.6a2 2 0 0 1-2-1.9L4 6H3V4zm-.9 2 1.5 13h8.8l1.5-13z"/></svg></span><h3>WooCommerce stores</h3><p>New stores, redesigns, checkout and cart fixes, and product setups that sell.</p></div>
+      <div class="service"><span class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M4 4h7v7H4zm2 2v3h3V6zm7-2h7v7h-7zm2 2v3h3V6zM4 13h7v7H4zm2 2v3h3v-3zm11-2h2v3h3v2h-3v3h-2v-3h-3v-2h3z"/></svg></span><h3>Block themes and Gutenberg</h3><p>Custom block themes and blocks, and moving old page-builder sites to native WordPress editing.</p></div>
+      <div class="service"><span class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M9 6V5a3 3 0 0 1 6 0v1h4l1 15H4L5 6zm2 0h2V5a1 1 0 0 0-2 0zM6.9 8l-.7 11h11.6l-.7-11z"/></svg></span><h3>Shopify themes</h3><p>Custom sections, product pages and theme features, without stacking up monthly apps.</p></div>
+      <div class="service"><span class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2 4 5v6c0 5 3.4 9.7 8 11 4.6-1.3 8-6 8-11V5zm0 2.2 6 2.2V11c0 3.9-2.5 7.6-6 8.9-3.5-1.3-6-5-6-8.9V6.4zm-1 10.4-2.8-2.8 1.4-1.4 1.4 1.4 3.9-3.9 1.4 1.4z"/></svg></span><h3>Bug fixes and hacked sites</h3><p>Broken layouts, plugin conflicts, slow pages, and malware or spam clean-up.</p></div>
+      <div class="service"><span class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M10 2a8 8 0 0 1 6.3 12.9l5.4 5.4-1.4 1.4-5.4-5.4A8 8 0 1 1 10 2zm0 2a6 6 0 1 0 0 12 6 6 0 0 0 0-12zm-3 7h2v3H7zm3-3h2v6h-2zm3 2h2v4h-2z"/></svg></span><h3>SEO and UX audits</h3><p>A clear list of what's stopping visitors from enquiring or buying, and the fixes for it.</p></div>
     </div>
+  </section>
+
+  <!-- PROCESS -->
+  <section id="process">
+    <div class="sec-head reveal">
+      <h2>How we'll work</h2>
+      <p>Simple steps, clear updates. You always know what's done and what's next.</p>
+    </div>
+    <ol class="steps stagger reveal">
+      <li><h3>Tell me what you need</h3><p>Share your site, your goal and any examples you like.</p></li>
+      <li><h3>Plan and quote</h3><p>I reply with how I'd build it, the timeline and a fixed price.</p></li>
+      <li><h3>Build and review</h3><p>You see progress on a staging link and ask for changes.</p></li>
+      <li><h3>Launch and hand over</h3><p>I go live, then show you how to edit everything yourself.</p></li>
+    </ol>
   </section>
 
   <!-- EXPERIENCE -->
@@ -338,16 +542,16 @@
       <h2>Experience</h2>
       <p>Agency work by day, my own clients on the side.</p>
     </div>
-    <ol class="timeline reveal">
+    <ol class="timeline stagger reveal">
       <li class="now">
+        <p class="when">Current</p>
         <h3>WordPress Developer, Shingala Infotech</h3>
-        <p class="when">Surat · Current</p>
-        <p>Client websites, custom themes and plugins.</p>
+        <p>Surat. Client websites, custom themes and plugins.</p>
       </li>
       <li>
+        <p class="when">Previous</p>
         <h3>WordPress Developer, Star Galaxy Infotech</h3>
-        <p class="when">Surat</p>
-        <p>WordPress builds and maintenance for agency clients.</p>
+        <p>Surat. WordPress builds and maintenance for agency clients.</p>
       </li>
     </ol>
   </section>
@@ -360,17 +564,15 @@
     </div>
     <div class="actions">
       <a class="btn" href="https://www.fiverr.com/shri_kakadiya" target="_blank" rel="noopener">Message me on Fiverr</a>
-      <a class="btn ghost" href="https://wa.me/919624729098" target="_blank" rel="noopener">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2Zm0 18.2c-1.5 0-3-.4-4.3-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2Zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8-.2-.1-.4-.1-.6.1l-.8 1c-.1.2-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.900c-.2-.4.2-.4.7-1.300.1-.2 0-.3 0-.4l-.8-1.800c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.200c0 1.300.9 2.500 1.100 2.700.1.2 1.800 2.800 4.400 3.900 1.600.7 2.300.8 3.100.6.5-.1 1.500-.6 1.700-1.200.2-.6.2-1.100.2-1.200-.1-.1-.3-.2-.5-.3Z"/></svg>
-        Chat on WhatsApp
-      </a>
+      <a class="btn ghost" href="https://wa.me/919624729098" target="_blank" rel="noopener"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2Zm0 18.2c-1.5 0-3-.4-4.3-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2Zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8-.2-.1-.4-.1-.6.1l-.8 1c-.1.2-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.2-.4.2-.4.7-1.3.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2c0 1.3.9 2.5 1.1 2.7.1.2 1.8 2.8 4.4 3.9 1.6.7 2.3.8 3.1.6.5-.1 1.5-.6 1.7-1.2.2-.6.2-1.1.2-1.2-.1-.1-.3-.2-.5-.3Z"/></svg>Chat on WhatsApp</a>
     </div>
   </div>
 
   <footer>
     <span>© 2026 Shridhar Kakadiya, Surat, India</span>
-    <span>Hand-coded, hosted on GitHub Pages</span>
+    <a href="#top">Back to top</a>
   </footer>
+</div>
 </div>
 
 <script>
@@ -410,7 +612,7 @@
     (function type(){
       if (n < chars.length) {
         chars[n].classList.add('on'); n++;
-        setTimeout(type, chars[n-1].textContent === ' ' ? 40 : 28 + Math.random()*30);
+        setTimeout(type, chars[n-1].textContent === ' ' ? 40 : 26 + Math.random()*28);
       } else {
         title.style.minHeight = '';
         setTimeout(finishHero, 250);
@@ -423,7 +625,7 @@
   function onScroll(){ bar.classList.toggle('scrolled', window.scrollY > 10); }
   window.addEventListener('scroll', onScroll, {passive:true}); onScroll();
 
-  /* 3. Reveal sections as they scroll into view, and underline the current nav link */
+  /* 3. Reveal sections as they scroll in, and underline the current nav link */
   if ('IntersectionObserver' in window) {
     var io = new IntersectionObserver(function(entries){
       entries.forEach(function(e){ if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
@@ -434,11 +636,12 @@
     document.querySelectorAll('.nav a[href^="#"]').forEach(function(a){ links[a.getAttribute('href').slice(1)] = a; });
     var spy = new IntersectionObserver(function(entries){
       entries.forEach(function(e){
-        var a = links[e.target.id]; if (!a) return;
-        if (e.isIntersecting) { Object.keys(links).forEach(function(k){ links[k].classList.remove('active'); }); a.classList.add('active'); }
+        var a = links[e.target.id]; if (!a || !e.isIntersecting) return;
+        Object.keys(links).forEach(function(k){ links[k].classList.remove('active'); });
+        a.classList.add('active');
       });
     }, {rootMargin:'-45% 0px -50% 0px'});
-    ['work','services','experience'].forEach(function(id){ var el = document.getElementById(id); if (el) spy.observe(el); });
+    ['work','services','process','experience'].forEach(function(id){ var el = document.getElementById(id); if (el) spy.observe(el); });
   } else {
     document.querySelectorAll('.reveal').forEach(function(el){ el.classList.add('in'); });
   }
