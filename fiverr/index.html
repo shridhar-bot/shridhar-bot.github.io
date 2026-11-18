@@ -244,6 +244,33 @@
   footer a{text-decoration:none}
   footer a:hover{color:var(--ink)}
 
+
+  /* about */
+  .status .ava{width:28px;height:28px;border-radius:50%;object-fit:cover;object-position:50% 12%;margin-right:-4px;border:2px solid #fff;box-shadow:0 0 0 1px var(--line)}
+  .about{display:grid;grid-template-columns:.9fr 1.1fr;gap:72px;align-items:center}
+  .about-photo{position:relative;max-width:420px;width:100%}
+  .about-photo figure{position:relative;margin:0;border-radius:20px;overflow:hidden;aspect-ratio:4/5;box-shadow:var(--shadow-lg);background:var(--line-soft)}
+  .about-photo img{width:100%;height:100%;object-fit:cover;object-position:50% 20%;display:block;transition:transform 1.2s var(--ease)}
+  .about-photo:hover img{transform:scale(1.04)}
+  .about-back{position:absolute;inset:22px -22px -22px 22px;border-radius:20px;background:var(--blue-soft);border:1px solid #CBD4FA}
+  .about-back::after{content:"";position:absolute;inset:0;border-radius:20px;background-image:radial-gradient(circle,#B4C1F5 1px,transparent 1.2px);background-size:16px 16px;opacity:.8}
+  .about-tag{position:absolute;left:-18px;bottom:28px;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:12px 16px;box-shadow:0 14px 30px -16px rgba(23,32,51,.45)}
+  .about-tag b{display:block;font-family:var(--display);font-size:1rem}
+  .about-tag span{color:var(--muted);font-size:.85rem}
+  .about-text h2{font-size:clamp(2.1rem,4vw,3.1rem);font-weight:700;letter-spacing:-.03em;margin-bottom:20px}
+  .about-lede{font-size:1.2rem;margin-bottom:14px}
+  .about-text p{max-width:56ch}
+  .about-text p + p{color:var(--muted)}
+  .facts{display:grid;grid-template-columns:repeat(3,auto);justify-content:start;gap:12px 36px;margin:30px 0 0;padding-top:24px;border-top:1px solid var(--line)}
+  .facts dt{color:var(--muted);font-size:.85rem;margin-bottom:2px}
+  .facts dd{margin:0;font-weight:600}
+  @media (max-width:900px){
+    .about{grid-template-columns:1fr;gap:56px}
+    .about-photo{max-width:340px}
+    .facts{grid-template-columns:1fr 1fr}
+  }
+  @media (max-width:640px){ .about-tag{left:10px} .about-back{inset:16px -12px -16px 16px} }
+
   /* scroll reveal */
   .js .reveal{opacity:0;transform:translateY(28px);transition:opacity .8s var(--ease),transform .8s var(--ease)}
   .js .reveal.in{opacity:1;transform:none}
@@ -301,6 +328,7 @@
     <header class="top">
       <a class="brand" href="#top"><span class="mark">SK</span><span>Shridhar Kakadiya</span></a>
       <nav class="nav" aria-label="Main">
+        <a href="#about">About</a>
         <a href="#work">Work</a>
         <a href="#services">Services</a>
         <a href="#process">Process</a>
@@ -313,7 +341,7 @@
 
 <div class="wrap">
   <div class="intro">
-    <span class="status"><span class="dot" aria-hidden="true"></span>Available for new projects</span>
+    <span class="status"><img class="ava" src="../images/shridhar.jpg" alt="" width="28" height="28"><span class="dot" aria-hidden="true"></span>Available for new projects</span>
     <span class="where">WordPress · WooCommerce · Shopify — Surat, India</span>
   </div>
 
@@ -332,6 +360,7 @@
       <p class="panel-title">List view</p>
       <ol>
         <li><a href="#top" aria-current="true"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M6 5h12v2H13v12h-2V7H6z"/></svg>Intro</a></li>
+        <li><a href="#about"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8zm0 2c-4 0-8 2-8 5v1h16v-1c0-3-4-5-8-5z"/></svg>About me</a></li>
         <li><a href="#work"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M4 5h16v14H4zm2 2v10h12V7z"/></svg>Selected work</a></li>
         <li class="sub"><a href="#itramh">Itramh Aroma</a></li>
         <li class="sub"><a href="#medizamed">Medizamed</a></li>
@@ -412,6 +441,26 @@
     </div>
   </div>
 
+
+  <!-- ABOUT -->
+  <section id="about" class="about">
+    <div class="about-photo reveal">
+      <span class="about-back" aria-hidden="true"></span>
+      <figure><img src="../images/shridhar.jpg" alt="Shridhar Kakadiya" width="640" height="800" loading="lazy"></figure>
+      <div class="about-tag" aria-hidden="true"><b>Shridhar Kakadiya</b><span>WordPress &amp; Shopify developer</span></div>
+    </div>
+    <div class="about-text reveal">
+      <h2>Hi, I'm Shridhar.</h2>
+      <p class="about-lede">I'm a WordPress developer from Surat, India. By day I build client sites at an agency, and on the side I take on my own projects: WooCommerce stores, block themes and Shopify themes.</p>
+      <p>I care about three things on every project: clean code you own, pages that load fast, and a site you can edit yourself without calling me for every small change.</p>
+      <dl class="facts">
+        <div><dt>Based in</dt><dd>Surat, India</dd></div>
+        <div><dt>Works with</dt><dd>WordPress, WooCommerce, Shopify</dd></div>
+        <div><dt>Currently</dt><dd>WordPress Developer, Shingala Infotech</dd></div>
+      </dl>
+    </div>
+  </section>
+
   <!-- WORK -->
   <section id="work">
     <div class="sec-head reveal">
@@ -429,14 +478,14 @@
 
       <article class="project reveal" id="itramh">
         <figure class="browser">
-          <div class="url" aria-hidden="true"><span class="lights"><i></i><i></i><i></i></span><span class="addr">🔒 itramh aroma</span></div>
+          <div class="url" aria-hidden="true"><span class="lights"><i></i><i></i><i></i></span><span class="addr">🔒 itramh.com</span></div>
           <div class="shot">
             <div class="mock itramh" aria-hidden="true">
               <div class="m-nav">ITRAMH AROMA <em><span>Shop</span><span>Attar</span><span>Cart</span></em></div>
               <div class="m-hero"><div><h4>Fragrance that stays with you</h4><span class="m-btn">Shop now</span></div><div class="m-art"></div></div>
               <div class="m-row"><i></i><i></i><i></i><i></i></div>
             </div>
-            <img src="../images/itramh.jpg" alt="Itramh Aroma perfume store homepage" loading="lazy" onerror="this.remove()">
+            <img src="https://s0.wp.com/mshots/v1/https%3A%2F%2Fitramh.com%2F?w=1200&vpw=1440&vph=3200" alt="Itramh Aroma perfume store homepage" loading="lazy" onerror="this.remove()">
           </div>
         </figure>
         <div>
@@ -450,7 +499,7 @@
             <li><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="m9.5 16.2-4.2-4.2-1.4 1.4 5.6 5.6L20.1 8.4 18.7 7z"/></svg>Theme code cleaned up to WordPress coding standards</li>
           </ul>
           <div class="stack"><span>WooCommerce</span><span>PHP</span><span>Gutenberg blocks</span><span>Hostinger</span></div>
-          <!-- Add the store link: <a class="visit" href="https://YOUR-LINK" target="_blank" rel="noopener">Visit the store</a> -->
+          <a class="visit" href="https://itramh.com/" target="_blank" rel="noopener">Visit itramh.com</a>
         </div>
       </article>
 
@@ -463,7 +512,7 @@
               <div class="m-hero"><div><h4>Medicines for 30+ countries</h4><span class="m-btn">Send enquiry</span></div><div class="m-art"></div></div>
               <div class="m-row"><i></i><i></i><i></i><i></i></div>
             </div>
-            <img src="../images/medizamed.jpg" alt="Medizamed pharma export website" loading="lazy" onerror="this.remove()">
+            <img src="https://s0.wp.com/mshots/v1/https%3A%2F%2Fmedizamed.com%2F?w=1200&vpw=1440&vph=3200" alt="Medizamed pharma export website" loading="lazy" onerror="this.remove()">
           </div>
         </figure>
         <div>
@@ -482,14 +531,14 @@
 
       <article class="project reveal" id="ishaya">
         <figure class="browser">
-          <div class="url" aria-hidden="true"><span class="lights"><i></i><i></i><i></i></span><span class="addr">🔒 ishaya</span></div>
+          <div class="url" aria-hidden="true"><span class="lights"><i></i><i></i><i></i></span><span class="addr">🔒 320ishaya.com</span></div>
           <div class="shot">
             <div class="mock ishaya" aria-hidden="true">
               <div class="m-nav">ISHAYA <em><span>New in</span><span>Sets</span><span>Bag</span></em></div>
               <div class="m-hero"><div><h4>The new season edit</h4><span class="m-btn">Shop the set</span></div><div class="m-art"></div></div>
               <div class="m-row"><i></i><i></i><i></i><i></i></div>
             </div>
-            <img src="../images/ishaya.jpg" alt="Ishaya Shopify store" loading="lazy" onerror="this.remove()">
+            <img src="https://s0.wp.com/mshots/v1/https%3A%2F%2F320ishaya.com%2F?w=1200&vpw=1440&vph=900" alt="Ishaya Shopify store" loading="lazy" onerror="this.remove()">
           </div>
         </figure>
         <div>
@@ -502,6 +551,7 @@
             <li><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="m9.5 16.2-4.2-4.2-1.4 1.4 5.6 5.6L20.1 8.4 18.7 7z"/></svg>Version-controlled theme on GitHub</li>
           </ul>
           <div class="stack"><span>Shopify Liquid</span><span>Online Store 2.0</span><span>GitHub</span></div>
+          <a class="visit" href="https://320ishaya.com/" target="_blank" rel="noopener">Visit 320ishaya.com</a>
         </div>
       </article>
     </div>
@@ -641,7 +691,7 @@
         a.classList.add('active');
       });
     }, {rootMargin:'-45% 0px -50% 0px'});
-    ['work','services','process','experience'].forEach(function(id){ var el = document.getElementById(id); if (el) spy.observe(el); });
+    ['about','work','services','process','experience'].forEach(function(id){ var el = document.getElementById(id); if (el) spy.observe(el); });
   } else {
     document.querySelectorAll('.reveal').forEach(function(el){ el.classList.add('in'); });
   }
@@ -661,7 +711,8 @@
       fig.addEventListener('mouseenter', function(){ img.style.transform = 'translateY(-' + (img.offsetHeight - shot.offsetHeight) + 'px)'; });
       fig.addEventListener('mouseleave', function(){ img.style.transform = ''; });
     }
-    if (img.complete && img.naturalHeight) setup(); else img.addEventListener('load', setup);
+    function ready(){ if (img.naturalWidth <= 400) { img.remove(); return; } setup(); }
+    if (img.complete && img.naturalHeight) ready(); else img.addEventListener('load', ready);
   });
 })();
 </script>
