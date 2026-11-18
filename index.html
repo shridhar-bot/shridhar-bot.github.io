@@ -319,6 +319,58 @@
     .js .reveal,.js .stagger > *,.js .hero-rest > *,.js .toolbar{opacity:1;transform:none}
     .js .block{outline-color:var(--blue)}
   }
+
+  /* ---------- responsive polish ---------- */
+  html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
+  img{max-width:100%}
+  .tools > p{max-width:none;white-space:nowrap}
+  .facts{grid-template-columns:repeat(auto-fit,minmax(150px,1fr))}
+  @media (hover:none){
+    .browser:hover,.service:hover{transform:none}
+    .hover-only{display:none}
+  }
+  @media (max-width:900px){
+    .about{grid-template-columns:.85fr 1.15fr;gap:48px}
+    .about-photo{max-width:none}
+    .sec-head{gap:14px;margin-bottom:36px}
+    .project{padding:20px 0 52px}
+    .project + .project{padding-top:52px}
+  }
+  @media (max-width:700px){
+    .about{grid-template-columns:1fr;gap:52px}
+    .about-photo{max-width:360px;margin:0 auto}
+  }
+  @media (max-width:640px){
+    .wrap{padding:0 18px}
+    .intro{margin:18px 0 16px}
+    .where{display:none}
+    .editor{border-radius:12px}
+    .canvas{padding:80px 20px 32px}
+    .block{outline-offset:10px}
+    .toolbar{top:-54px;left:-10px}
+    .hero-sub{margin-top:34px;font-size:1.02rem}
+    .hero-actions .btn{flex:1 1 auto;justify-content:center}
+    .inserter{margin-top:30px}
+    .tools{margin-top:40px}
+    .about-lede{font-size:1.08rem}
+    .facts{grid-template-columns:1fr;gap:0}
+    .facts > div{display:flex;justify-content:space-between;gap:16px;padding:10px 0;border-bottom:1px solid var(--line-soft)}
+    .facts dt{margin:0}
+    .facts dd{text-align:right}
+    .project h3{font-size:1.75rem}
+    .service{display:grid;grid-template-columns:44px 1fr;column-gap:16px;padding:20px}
+    .service .ic{margin:0}
+    .service h3{font-size:1.1rem;margin:0;align-self:center}
+    .service p{grid-column:1/-1;margin-top:12px}
+    .steps{gap:26px}
+    .steps li{display:grid;grid-template-columns:44px 1fr;column-gap:16px}
+    .steps li::before{width:44px;height:44px;margin:0;grid-row:span 2;font-size:1rem}
+    .steps h3{margin:8px 0 4px}
+    .contact{padding:44px 22px;border-radius:16px;margin-top:96px}
+    .contact .actions{align-items:stretch;width:100%}
+    .contact .actions .btn{justify-content:center}
+    footer{padding:28px 0 36px}
+  }
 </style>
 </head>
 <body>
@@ -467,7 +519,7 @@
   <section id="work">
     <div class="sec-head reveal">
       <h2>Selected work</h2>
-      <p>Live projects for real businesses: a perfume store, a pharma exporter and a fashion label. Hover a preview to scroll the page.</p>
+      <p>Live projects for real businesses: a perfume store, a pharma exporter and a fashion label.<span class="hover-only"> Hover a preview to scroll the page.</span></p>
     </div>
 
     <div class="projects">
@@ -711,6 +763,12 @@
       hint.className = 'hint'; hint.textContent = 'Scrolling the page';
       shot.appendChild(hint);
       img.style.transitionDuration = Math.min(8, Math.max(2, dist/350)) + 's';
+      if (window.matchMedia('(hover: none)').matches && 'IntersectionObserver' in window && !reduce) {
+        hint.remove();
+        new IntersectionObserver(function(es){ es.forEach(function(e){
+          img.style.transform = e.isIntersecting ? 'translateY(-' + (img.offsetHeight - shot.offsetHeight) + 'px)' : '';
+        }); }, {threshold:.6}).observe(fig);
+      }
       fig.addEventListener('mouseenter', function(){ img.style.transform = 'translateY(-' + (img.offsetHeight - shot.offsetHeight) + 'px)'; });
       fig.addEventListener('mouseleave', function(){ img.style.transform = ''; });
     }
